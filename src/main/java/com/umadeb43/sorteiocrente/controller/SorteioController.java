@@ -1,13 +1,15 @@
 package com.umadeb43.sorteiocrente.controller;
 
+import com.umadeb43.sorteiocrente.dto.SorteioResponse;
 import com.umadeb43.sorteiocrente.service.SorteioService;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 import java.util.Arrays;
 
-
+@CrossOrigin(origins = "*")
 @RestController
 public class SorteioController {
 
@@ -19,11 +21,13 @@ public class SorteioController {
 
 
     @GetMapping("/sortear")
-    public String sortear(@RequestParam String nomes) {
+    public SorteioResponse sortear(@RequestParam String nomes) {
 
-        List<String> lista = Arrays.asList(nomes.split(","));
+        List<String> lista = Arrays.stream(nomes.split(","))
+                .map(String::trim)
+                .toList();
 
-        return sorteioService.sortear(lista);
+        return new SorteioResponse(sorteioService.sortear(lista));
     }
 }
 
