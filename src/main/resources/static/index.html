@@ -3,21 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Sorteio</title>
+    <link rel="stylesheet" href="style.css"
 </head>
 <body>
 
-    <h1> Sorteador Umadeb </h1>
+<div class="container">
+    <div class="topo">
+        <img src="images/logo.png" class="logo">
+        <h1> Sorteador Umadeb </h1>
+    </div>
 
-    <input
+    <div class="conteudo">
+        <input
         type="text"
         id="nomes"
-        placeholder="Digite os nomes separados por vírgula"
-        style="width: 300px"
-    />
+        placeholder="Digite os nomes separados por vírgula">
+        <button onclick="sortear()">Sortear</button>
+
+        <h2 id="resultado"></h2>
+    </div>
+
+</div>
+
+
     <br><br>
 
-    <button onclick="sortear()">Sortear</button>
-    <h2 id="resultado"></h2>
 
     <script src="script.js"></script>
 </body>
