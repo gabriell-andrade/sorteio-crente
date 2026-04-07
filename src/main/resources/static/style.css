@@ -1,0 +1,81 @@
+body{
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #D2B89C; /* bege */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: #f5e6d3;
+    padding: 20px;
+    border-radius: 20px;
+    width: 350px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+
+}
+
+/*TOPO*/
+.topo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/*LOGO ESQUERDA*/
+.logo{
+    width: 60px;
+    position: absolute;
+    left: 0;
+}
+
+/*TITULO CENTRAL*/
+h1{
+    color: #7A2E1F; /* marrom escuro */
+    font-size: 20px;
+    text-align: center;
+}
+
+/*CONTEUDO*/
+.conteudo{
+    margin-top: 30px;
+    text-align: center;
+}
+
+/*INPUT*/
+input{
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #B89A7A;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/*BOTÃO*/
+button{
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background-color:#D83A2E; /* vermelho */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+
+}
+
+button:hover {
+    background-color: #b83228;
+}
+
+/*RESULTADO*/
+#resultado {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #7A2E1F;
+    font-weight: bold;
+}
