@@ -43,6 +43,13 @@ function animarSorteio(nomes, elemento) {
     });
 }
 
+document.getElementById("nomes").addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sortear();
+    }
+});
+
 async function sortear() {
     const textarea = document.getElementById("nomes");
     const resultado = document.getElementById("resultado");
@@ -51,7 +58,8 @@ async function sortear() {
     let nomes = tratarNomes(textarea.value);
 
     if (nomes.length === 0) {
-        alert("Digite pelo menos um nome válido!");
+        resultado.innerText = "Digite pelo menos um nome válido!";
+        resultado.classList.add("resultado-final");
         return;
     }
 
@@ -65,11 +73,17 @@ async function sortear() {
         const response = await fetch(`http://localhost:8080/sortear?nomes=${nomes.join(",")}`);
         const data = await response.json();
 
+        resultado.classList.remove("resultado-final");
+        void resultado.offsetWidth;
         resultado.innerText = "🎉 " + data.nome;
         resultado.classList.add("resultado-final");
+
+        resultado.scrollIntoView({ behavior: "smooth" });
+
     } catch (error) {
         console.error("Erro:", error);
-        alert("Erro ao conectar com o servidor");
+        resultado.innerText = "Erro ao conectar com o servidor";
+        resultado.classList.add("resultado-final");
     }
 
     botao.classList.remove("loading");
