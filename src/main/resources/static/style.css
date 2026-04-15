@@ -178,11 +178,11 @@ button.loading {
 
 @media (max-width: 480px) {
     .logo {
-        width: 60px;
+        width: 80px;
     }
 
     h1 {
-        font-size: 20px;
+        font-size: 26px;
         white-space: nowrap;
     }
 
