@@ -3,12 +3,26 @@ function autoResize(el) {
     el.style.height = el.scrollHeight + "px";
 }
 
+function capitalizarNome(nome) {
+    return nome
+        .toLowerCase()
+        .split(" ")
+        .filter(p => p !== "")
+        .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+        .join(" ");
+}
+
 function tratarNomes(texto) {
     return texto
         .split(",")
         .map(nome => capitalizarNome(nome.trim()))
         .filter(nome => nome !== "")
         .filter((nome, index, array) => array.indexOf(nome) === index);
+}
+
+function atualizarContador() {
+    const nomes = tratarNomes(document.getElementById("nomes").value);
+    document.getElementById("contador").innerText = nomes.length + " nomes";
 }
 
 function animarSorteio(nomes, elemento) {
@@ -52,6 +66,7 @@ async function sortear() {
         const data = await response.json();
 
         resultado.innerText = "🎉 " + data.nome;
+        resultado.classList.add("resultado-final");
     } catch (error) {
         console.error("Erro:", error);
         alert("Erro ao conectar com o servidor");
@@ -60,13 +75,4 @@ async function sortear() {
     botao.classList.remove("loading");
     botao.innerText = "Sortear";
     botao.disabled = false;
-}
-
-function capitalizarNome(nome) {
-    return nome
-        .toLowerCase()
-        .split(" ")
-        .filter(p => p !== "")
-        .map(p => p.charAt(0).toUpperCase() + p.slice(1))
-        .join(" ");
 }

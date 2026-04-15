@@ -17,14 +17,19 @@
 
     <div class="conteudo">
 
+        <span id="contador"></span>
+
         <p class="descricao">Digite os nomes separados por vírgula</p>
 
-        <textarea
-                id="nomes"
-                rows="3"
-                placeholder="Ex: João, Maria, Pedro"
-                oninput="autoResize(this)"
-        ></textarea>
+        <div class="campo-nomes">
+            <textarea
+                    id="nomes"
+                    rows="3"
+                    placeholder="Ex: João, Maria, Pedro"
+                    oninput="autoResize(this); atualizarContador()"
+            ></textarea>
+
+        </div>
 
         <button id="btnSortear" onclick="sortear()">Sortear</button>
 
