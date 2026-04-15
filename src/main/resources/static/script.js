@@ -90,3 +90,23 @@ async function sortear() {
     botao.innerText = "Sortear";
     botao.disabled = false;
 }
+
+const textarea = document.getElementById("nomes");
+
+function isMobile() {
+    return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+}
+
+if (isMobile()) {
+    textarea.addEventListener("focus", () => {
+        document.body.style.alignItems = "flex-start";
+        document.body.style.paddingTop = "40px";
+    });
+
+    textarea.addEventListener("blur", () => {
+        setTimeout(() => {
+            document.body.style.alignItems = "center";
+            document.body.style.paddingTop = "20px";
+        }, 150);
+    });
+}
