@@ -40,18 +40,23 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 10px 0;
 }
 
 .logo {
-    width: 50px;
+    width: 70px;
     border-radius: 50%;
 }
 
 h1 {
     color: #7A2E1F;
-    font-size: 18px;
+    font-size: 24px;
     margin: 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .conteudo {
@@ -172,11 +177,16 @@ button.loading {
 }
 
 @media (max-width: 480px) {
-    h1 {
-        font-size: 16px;
+    .logo {
+        width: 60px;
     }
 
-    #resultado {
-        font-size: 18px;
+    h1 {
+        font-size: 20px;
+        white-space: nowrap;
+    }
+
+    .topo {
+        gap: 10px;
     }
 }
