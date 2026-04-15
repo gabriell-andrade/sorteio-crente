@@ -134,7 +134,7 @@ GET /sortear?nomes=Gabriel,Karla,Ricardo
 
 ## 🙌 Contexto
 
-Este projeto foi desenvolvido de forma voluntária para uso na Igreja Assembleia de Deus Ministério dp Belém
+Este projeto foi desenvolvido de forma voluntária para uso na Igreja Assembleia de Deus Ministério do Belém
 
 ---
 
