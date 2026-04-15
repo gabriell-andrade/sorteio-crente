@@ -1,81 +1,176 @@
-body{
+* {
+    box-sizing: border-box;
+}
+
+body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     font-family: Arial, sans-serif;
-    background-color: #D2B89C; /* bege */
+    background: linear-gradient(135deg, #D2B89C, #e8d3b5);
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 .container {
+    position: relative;
     background: #f5e6d3;
-    padding: 20px;
+    padding: 25px;
     border-radius: 20px;
-    width: 350px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-
+    width: 100%;
+    max-width: 400px;
+    box-shadow:
+            0 10px 25px rgba(0, 0, 0, 0.15),
+            0 5px 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
 }
 
-/*TOPO*/
+.container:hover {
+    transform: translateY(-5px);
+}
+
 .topo {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 50px;
+}
+
+h1 {
+    color: #7A2E1F;
+    font-size: 18px;
+    margin: 0;
+}
+
+.conteudo {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.descricao {
+    font-size: 13px;
+    color: #7A2E1F;
+    margin-bottom: 8px;
+}
+
+.campo-nomes {
     position: relative;
+    margin-bottom: 15px;
 }
 
-/*LOGO ESQUERDA*/
-.logo{
-    width: 60px;
-    position: absolute;
-    left: 0;
-}
-
-/*TITULO CENTRAL*/
-h1{
-    color: #7A2E1F; /* marrom escuro */
-    font-size: 20px;
-    text-align: center;
-}
-
-/*CONTEUDO*/
-.conteudo{
-    margin-top: 30px;
-    text-align: center;
-}
-
-/*INPUT*/
-input{
+textarea {
     width: 100%;
-    padding: 8px;
+    min-height: 80px;
+    padding: 12px;
     border-radius: 10px;
     border: 1px solid #B89A7A;
-    margin-bottom: 15px;
     font-size: 14px;
+    resize: none;
+    overflow: hidden;
+    outline: none;
 }
 
-/*BOTÃO*/
-button{
+textarea:focus {
+    border-color: #7A2E1F;
+}
+
+textarea::placeholder {
+    color: #a88c6b;
+}
+
+#contador {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 11px;
+    color: #7A2E1F;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+#contador:empty {
+    display: none;
+}
+
+button {
     width: 100%;
     padding: 12px;
     border: none;
     border-radius: 10px;
-    background-color:#D83A2E; /* vermelho */
+    background: linear-gradient(135deg, #D83A2E, #ff6b5e);
     color: white;
     font-size: 16px;
     cursor: pointer;
-
+    transition: 0.2s;
 }
 
 button:hover {
-    background-color: #b83228;
+    background: linear-gradient(135deg, #b83228, #ff4d3d);
 }
 
-/*RESULTADO*/
+button:active {
+    transform: scale(0.97);
+}
+
+button.loading {
+    background: #999;
+    cursor: not-allowed;
+}
+
 #resultado {
     margin-top: 20px;
-    font-size: 20px;
+    font-size: 22px;
     color: #7A2E1F;
     font-weight: bold;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(216, 58, 46, 0.1);
+}
+
+#resultado:empty {
+    display: none;
+}
+
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.resultado-final {
+    animation: aparecer 0.4s ease;
+}
+
+@keyframes piscar {
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+.animando {
+    animation: piscar 0.5s infinite;
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 16px;
+    }
+
+    #resultado {
+        font-size: 18px;
+    }
 }
