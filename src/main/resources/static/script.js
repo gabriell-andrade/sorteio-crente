@@ -70,7 +70,7 @@ async function sortear() {
     await animarSorteio(nomes, resultado);
 
     try {
-        const response = await fetch(`http://localhost:8080/sortear?nomes=${nomes.join(",")}`);
+        const response = await fetch(`https://sorteio-crente-production.up.railway.app/sortear?nomes=${nomes.join(",")}`)
         const data = await response.json();
 
         resultado.classList.remove("resultado-final");
