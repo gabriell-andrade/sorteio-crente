@@ -20,11 +20,6 @@ body {
     width: 100%;
     max-width: 400px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    transition: 0.3s;
-}
-
-.container:hover {
-    transform: translateY(-3px);
 }
 
 .topo {
@@ -49,17 +44,27 @@ h1 {
     text-align: center;
 }
 
-input {
+.descricao {
+    font-size: 13px;
+    color: #7A2E1F;
+    margin-bottom: 8px;
+}
+
+/* TEXTAREA */
+textarea {
     width: 100%;
+    min-height: 80px;
     padding: 10px;
     border-radius: 10px;
     border: 1px solid #B89A7A;
     margin-bottom: 15px;
     font-size: 14px;
+    resize: none;
+    overflow: hidden;
     outline: none;
 }
 
-input:focus {
+textarea:focus {
     border-color: #7A2E1F;
 }
 
@@ -72,7 +77,6 @@ button {
     color: white;
     font-size: 16px;
     cursor: pointer;
-    transition: 0.2s;
 }
 
 button:hover {
@@ -86,11 +90,22 @@ button:hover {
     font-weight: bold;
 }
 
-@media (max-width: 480px) {
-    .container {
-        padding: 20px;
-    }
+button.loading {
+    background-color: #999;
+    cursor: not-allowed;
+}
 
+@keyframes piscar {
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+.animando {
+    animation: piscar 0.5s infinite;
+}
+
+@media (max-width: 480px) {
     h1 {
         font-size: 16px;
     }

@@ -16,12 +16,17 @@
     </div>
 
     <div class="conteudo">
-        <input
-                type="text"
-                id="nomes"
-                placeholder="Ex: Jesus, Maria, José">
 
-        <button onclick="sortear()">Sortear</button>
+        <p class="descricao">Digite os nomes separados por vírgula</p>
+
+        <textarea
+                id="nomes"
+                rows="3"
+                placeholder="Ex: João, Maria, Pedro"
+                oninput="autoResize(this)"
+        ></textarea>
+
+        <button id="btnSortear" onclick="sortear()">Sortear</button>
 
         <h2 id="resultado"></h2>
     </div>
