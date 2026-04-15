@@ -22,7 +22,7 @@ function tratarNomes(texto) {
 
 function atualizarContador() {
     const nomes = tratarNomes(document.getElementById("nomes").value);
-    document.getElementById("contador").innerText = nomes.length + " nomes";
+    document.getElementById("contador").innerText = `Nomes: ${nomes.length}`;
 }
 
 function animarSorteio(nomes, elemento) {

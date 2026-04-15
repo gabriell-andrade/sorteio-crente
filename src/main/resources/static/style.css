@@ -14,6 +14,7 @@ body {
 }
 
 .container {
+    position: relative;
     background: #f5e6d3;
     padding: 25px;
     border-radius: 20px;
@@ -85,14 +86,18 @@ textarea::placeholder {
 
 #contador {
     position: absolute;
-    top: 6px;
-    right: 10px;
+    top: 12px;
+    right: 16px;
     font-size: 11px;
     color: #7A2E1F;
-    background: rgba(245, 230, 211, 0.9);
-    padding: 2px 6px;
-    border-radius: 8px;
-    opacity: 0.9;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+#contador:empty {
+    display: none;
 }
 
 button {
@@ -129,6 +134,11 @@ button.loading {
     border-radius: 10px;
     background: rgba(216, 58, 46, 0.1);
 }
+
+#resultado:empty {
+    display: none;
+}
+
 
 @keyframes aparecer {
     from {
