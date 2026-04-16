@@ -54,6 +54,9 @@ async function sortear() {
     const textarea = document.getElementById("nomes");
     const resultado = document.getElementById("resultado");
     const botao = document.getElementById("btnSortear");
+    const btnListas = document.getElementById("btnListas");
+    const btnLimpar = document.getElementById("btnLimpar");
+
 
     let nomes = tratarNomes(textarea.value);
 
@@ -64,8 +67,13 @@ async function sortear() {
     }
 
     botao.classList.add("loading");
+    btnListas.classList.add("loading");
+    btnLimpar.classList.add("loading");
     botao.innerText = "Sorteando...";
     botao.disabled = true;
+    btnListas.disabled = true;
+    btnLimpar.disabled = true;
+
 
     await animarSorteio(nomes, resultado);
 
@@ -87,8 +95,12 @@ async function sortear() {
     }
 
     botao.classList.remove("loading");
+    btnListas.classList.remove("loading");
+    btnLimpar.classList.remove("loading");
     botao.innerText = "Sortear";
     botao.disabled = false;
+    btnListas.disabled = false;
+    btnLimpar.disabled = false;
 }
 
 const textarea = document.getElementById("nomes");
@@ -109,4 +121,14 @@ if (isMobile()) {
             document.body.style.paddingTop = "20px";
         }, 150);
     });
+}
+
+function limparNomes() {
+    const textarea = document.getElementById("nomes");
+    const resultado = document.getElementById("resultado");
+
+    textarea.value = "";
+    resultado.innerText = "";
+
+    atualizarContador();
 }

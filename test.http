@@ -1,0 +1,11 @@
+POST http://localhost:8080/listas
+Content-Type: application/json
+
+{
+  "nome": "jovens",
+  "participantes": ["Gabriel", "Karla", "Ricardo"]
+}
+
+###
+
+GET http://localhost:8080/listas

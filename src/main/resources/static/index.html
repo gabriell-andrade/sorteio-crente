@@ -28,7 +28,11 @@
                     placeholder="Ex: Gabriel, Karla, Ricardo"
                     oninput="autoResize(this); atualizarContador()"
             ></textarea>
+        </div>
 
+        <div class="acoes">
+            <button id="btnListas" type="button" onclick="abrirModal()">Listas</button>
+            <button id="btnLimpar" type="button" onclick="limparNomes()" class="btn-secundario">Limpar</button>
         </div>
 
         <button id="btnSortear" onclick="sortear()">Sortear</button>

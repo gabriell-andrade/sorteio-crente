@@ -136,6 +136,7 @@ button.loading {
     cursor: not-allowed;
 }
 
+
 #resultado {
     margin-top: 20px;
     font-size: 22px;
@@ -174,6 +175,17 @@ button.loading {
 
 .animando {
     animation: piscar 0.5s infinite;
+}
+
+.acoes {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px
+}
+
+.acoes button {
+    flex: 1;
 }
 
 @media (max-width: 480px) {
