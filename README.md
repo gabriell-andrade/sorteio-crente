@@ -1,6 +1,12 @@
 # 🎲 Sorteio Crente
 
-Aplicação web desenvolvida com **Spring Boot** para realizar sorteios de forma simples e eficiente, permitindo selecionar participantes de maneira aleatória.
+Aplicação web full stack desenvolvida com **Spring Boot** e **JavaScript** para realizar sorteios de forma simples, interativa e responsiva.
+
+---
+
+## 🌐 Aplicação online
+
+👉 https://sorteio-crente-production.up.railway.app
 
 ---
 
@@ -8,21 +14,21 @@ Aplicação web desenvolvida com **Spring Boot** para realizar sorteios de forma
 
 ### 🔙 Backend
 
-* Java
-* Spring Boot
-* Maven
+- Java
+- Spring Boot
+- Maven
 
 ### 🔜 Frontend
 
-* HTML5
-* CSS3
-* JavaScript
+- HTML5
+- CSS3
+- JavaScript
 
 ---
 
 ## 📂 Estrutura do projeto
 
-```id="c1u5s2"
+```
 sorteio-crente-main/
 ├── src/
 │   ├── main/
@@ -44,8 +50,8 @@ sorteio-crente-main/
 
 ### ✅ Pré-requisitos
 
-* Java 17+
-* Maven
+- Java 17+
+- Maven
 
 ---
 
@@ -53,8 +59,8 @@ sorteio-crente-main/
 
 1. Clone o repositório:
 
-```bash id="g0m7k9"
-git clone github.com/gabriell-andrade/sorteio-crente.git
+```bash
+git clone https://github.com/gabriell-andrade/sorteio-crente.git
 cd sorteio-crente-main
 ```
 
@@ -62,13 +68,13 @@ cd sorteio-crente-main
 
 Linux/Mac:
 
-```bash id="y6z8t3"
+```bash
 ./mvnw spring-boot:run
 ```
 
 Windows:
 
-```bash id="c2n9x1"
+```bash
 mvnw.cmd spring-boot:run
 ```
 
@@ -76,49 +82,41 @@ mvnw.cmd spring-boot:run
 
 ### 🌐 Acesse no navegador
 
-```id="f8q3w2"
 http://localhost:8080
-```
 
 ---
 
 ## 💡 Funcionalidades
 
-* Cadastro de participantes
-* Sorteio aleatório
-* Exibição do resultado em tempo real
-* Interface simples e intuitiva
+- Inserção de participantes
+- Sorteio aleatório
+- Animação de sorteio (efeito roleta)
+- Contador dinâmico de nomes
+- Interface responsiva e otimizada para mobile
+- Feedback visual em tempo real
 
 ---
 
 ## 🧠 Como funciona
 
-1. O usuário insere os participantes na interface
-2. O frontend envia os dados para o backend
-3. O Spring Boot processa o sorteio
-4. O resultado é retornado e exibido na tela
+1. O usuário insere os nomes separados por vírgula  
+2. O frontend envia os dados para o backend  
+3. O Spring Boot processa o sorteio  
+4. O resultado é retornado e exibido na tela  
 
 ---
 
-## 🔌 API (exemplo)
+## 🔌 API
 
-```id="v3k9p1"
-POST /sorteio
-```
+### 📍 Endpoint
 
-### 📥 Request
-
-```json id="a2m7z4"
-{
-  "nomes": ["Gabriel", "Karla", "Ricardo"]
-}
-```
+GET /sortear?nomes=Gabriel,Karla,Ricardo
 
 ### 📤 Response
 
-```json id="b6x1n8"
+```json
 {
-  "sorteado": "Karla"
+  "nome": "Karla"
 }
 ```
 
@@ -126,12 +124,17 @@ POST /sorteio
 
 ## 🎯 Objetivo do projeto
 
-* Praticar desenvolvimento com Spring Boot
-* Criar APIs REST
-* Integrar backend com frontend
-* Trabalhar lógica de sorteio
+- Praticar desenvolvimento com Spring Boot
+- Criar e consumir APIs REST
+- Integrar frontend com backend
+- Aplicar conceitos de UX/UI
+- Simular um fluxo real de aplicação web
 
 ---
+
+## 🙌 Contexto
+
+Este projeto foi desenvolvido de forma voluntária para uso na Igreja Assembleia de Deus Ministério do Belém
 
 ---
 
@@ -144,4 +147,4 @@ POST /sorteio
 
 ## 📄 Licença
 
-Projeto de uso educacional.
+Este projeto está sob a licença MIT.

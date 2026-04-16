@@ -2,33 +2,42 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Sorteio</title>
-    <link rel="stylesheet" href="style.css"
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteador UMADEB</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
+
     <div class="topo">
         <img src="images/logo.png" class="logo">
-        <h1> Sorteador Umadeb </h1>
+        <h1>Sorteador UMADEB</h1>
     </div>
 
     <div class="conteudo">
-        <input
-        type="text"
-        id="nomes"
-        placeholder="Digite os nomes separados por vírgula">
-        <button onclick="sortear()">Sortear</button>
+
+        <span id="contador"></span>
+
+        <p class="descricao">Digite os nomes separados por vírgula</p>
+
+        <div class="campo-nomes">
+            <textarea
+                    id="nomes"
+                    rows="3"
+                    placeholder="Ex: Gabriel, Karla, Ricardo"
+                    oninput="autoResize(this); atualizarContador()"
+            ></textarea>
+
+        </div>
+
+        <button id="btnSortear" onclick="sortear()">Sortear</button>
 
         <h2 id="resultado"></h2>
     </div>
 
 </div>
 
-
-    <br><br>
-
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
