@@ -8,40 +8,50 @@
 </head>
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <div class="topo">
-        <img src="images/logo.png" class="logo">
-        <h1>Sorteador UMADEB</h1>
-    </div>
-
-    <div class="conteudo">
-
-        <span id="contador"></span>
-
-        <p class="descricao">Digite os nomes separados por vírgula</p>
-
-        <div class="campo-nomes">
-            <textarea
-                    id="nomes"
-                    rows="3"
-                    placeholder="Ex: Gabriel, Karla, Ricardo"
-                    oninput="autoResize(this); atualizarContador()"
-            ></textarea>
+        <div class="topo">
+            <img src="images/logo.png" class="logo">
+            <h1>Sorteador UMADEB</h1>
         </div>
 
-        <div class="acoes">
-            <button id="btnListas" type="button" onclick="abrirModal()">Listas</button>
-            <button id="btnLimpar" type="button" onclick="limparNomes()" class="btn-secundario">Limpar</button>
+        <div class="conteudo">
+
+            <span id="contador"></span>
+
+            <p class="descricao">Digite os nomes separados por vírgula</p>
+
+            <div class="campo-nomes">
+                <textarea
+                        id="nomes"
+                        rows="3"
+                        placeholder="Ex: Gabriel, Karla, Ricardo"
+                        oninput="autoResize(this); atualizarContador()"
+                ></textarea>
+            </div>
+
+            <div class="acoes">
+                <button id="btnListas" type="button" onclick="abrirModal()">Listas</button>
+                <button id="btnLimpar" type="button" onclick="limparNomes()" class="btn-secundario">Limpar</button>
+            </div>
+
+            <button id="btnSortear" onclick="sortear()">Sortear</button>
+
+            <h2 id="resultado"></h2>
         </div>
 
-        <button id="btnSortear" onclick="sortear()">Sortear</button>
-
-        <h2 id="resultado"></h2>
     </div>
 
-</div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h3>Listas</h3>
 
-<script src="script.js"></script>
+            <select id="listaModal"></select>
+
+            <button onclick="fecharModal()">Fechar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

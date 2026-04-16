@@ -132,3 +132,54 @@ function limparNomes() {
 
     atualizarContador();
 }
+
+const API_URL = "http://localhost:8080";
+
+async function abrirModal() {
+    const btn = document.getElementById("btnListas");
+    const modal = document.getElementById("modal");
+
+    btn.classList.add("loading");
+    btn.disabled = true;
+
+    modal.style.display = "flex";
+
+    try {
+        const response = await fetch(`${API_URL}/listas`);
+        const data = await response.json();
+
+        const select = document.getElementById("listaModal");
+        select.innerHTML = "";
+
+        if (Object.keys(data).length === 0) {
+            select.innerHTML = "<option>Nenhuma lista encontrada</option>";
+            return;
+        }
+
+        Object.keys(data).forEach(nome => {
+            const option = document.createElement("option");
+            option.value = nome;
+            option.textContent = nome;
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error("Erro ao carregar listas:", error);
+        alert("Erro ao carregar listas");
+    }
+
+    btn.classList.remove("loading");
+    btn.disabled = false;
+}
+
+function fecharModal() {
+    const modal = document.getElementById("modal");
+    const btn = document.getElementById("btnListas");
+
+    if (modal) modal.style.display = "none";
+
+    if (btn) {
+        btn.classList.remove("loading");
+        btn.disabled = false;
+    }
+}
