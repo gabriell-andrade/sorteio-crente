@@ -2,10 +2,6 @@ const API_URL = window.location.hostname.includes("localhost")
     ? "http://localhost:8080"
     : "https://sorteio-crente-production.up.railway.app";
 
-/* =========================
-   UTIL
-========================= */
-
 function autoResize(el) {
     el.style.height = "auto";
     el.style.height = el.scrollHeight + "px";
@@ -28,18 +24,10 @@ function tratarNomes(texto) {
         .filter((nome, i, arr) => arr.indexOf(nome) === i);
 }
 
-/* =========================
-   CONTADOR
-========================= */
-
 function atualizarContador() {
     const nomes = tratarNomes(document.getElementById("nomes").value);
     document.getElementById("contador").innerText = `Nomes: ${nomes.length}`;
 }
-
-/* =========================
-   SORTEIO
-========================= */
 
 function animarSorteio(nomes, elemento) {
     let i = 0;
