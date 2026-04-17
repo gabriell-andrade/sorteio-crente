@@ -20,9 +20,13 @@ public class ParticipanteService {
     }
 
     public void salvar(List<String> nomes) {
+
         repository.deleteAll();
 
         List<Participante> lista = nomes.stream()
+                .map(String::trim)
+                .filter(nome -> !nome.isEmpty())
+                .distinct()
                 .map(Participante::new)
                 .toList();
 
