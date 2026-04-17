@@ -26,7 +26,14 @@ function tratarNomes(texto) {
 
 function atualizarContador() {
     const nomes = tratarNomes(document.getElementById("nomes").value);
-    document.getElementById("contador").innerText = `Nomes: ${nomes.length}`;
+    const contador = document.getElementById("contador");
+
+    if (nomes.length === 0) {
+        contador.innerText = "";
+        return;
+    }
+
+    contador.innerText = `Nomes: ${nomes.length}`;
 }
 
 function animarSorteio(nomes, elemento) {
@@ -219,8 +226,10 @@ function removerParticipante(event) {
 
 function adicionarAoSorteio() {
     const selecionados = Array.from(
-        document.querySelectorAll("#participantes input:checked")
-    ).map(cb => cb.value);
+        document.querySelectorAll("#participantes .participante")
+    )
+        .filter(p => p.querySelector("input[type='checkbox']").checked)
+        .map(p => p.querySelector(".nome-editavel").value.trim());
 
     const textarea = document.getElementById("nomes");
 
@@ -238,8 +247,9 @@ function adicionarAoSorteio() {
 
 async function salvarParticipantes() {
     const lista = Array.from(
-        document.querySelectorAll("#participantes input")
-    ).map(cb => cb.value);
+        document.querySelectorAll(".participante")
+    ).map(p => p.querySelector(".nome-editavel").value.trim())
+        .filter(n => n);
 
     try {
         await fetch(`${API_URL}/participantes`, {
@@ -266,6 +276,13 @@ function habilitarEdicao(event) {
     input.focus();
 
     input.selectionStart = input.value.length;
+
+    input.addEventListener("blur", () => {
+        input.disabled = true;
+
+        const checkbox = item.querySelector("input[type='checkbox']");
+        checkbox.value = input.value.trim();
+    }, { once: true });
 }
 
 document.addEventListener("blur", function (e) {
