@@ -273,3 +273,15 @@ document.addEventListener("blur", function (e) {
         e.target.disabled = true;
     }
 }, true);
+
+let modoEdicao = false;
+
+function toggleModoEdicao() {
+    const modal = document.querySelector(".modal-content");
+    const botao = document.getElementById("btnEditarModo");
+
+    modal.classList.toggle("modo-edicao");
+
+    const ativo = modal.classList.contains("modo-edicao");
+    botao.innerText = ativo ? "Concluir" : "Editar";
+}

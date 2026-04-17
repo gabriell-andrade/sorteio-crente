@@ -276,7 +276,7 @@ button.loading {
 }
 
 .adicionar {
-    display: flex;
+    display: none;
     gap: 8px;
 }
 
@@ -341,11 +341,47 @@ button.loading {
     width: 24px;
     height: 24px;
 
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
 
     padding: 0;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    flex: 1;
+}
+
+#btnEditarModo {
+    width: auto;
+
+    padding: 6px 12px;
+    border-radius: 8px;
+
+    background: rgba(122, 46, 31, 0.1);
+    color: #7A2E1F;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    border: none;
+    cursor: pointer;
+}
+
+#btnEditarModo:hover {
+    background: rgba(122, 46, 31, 0.2);
+}
+
+.modal-content.modo-edicao .btn-editar,
+.modal-content.modo-edicao .btn-remover,
+.modal-content.modo-edicao .adicionar {
+    display: flex;
 }
 
 @media (max-width: 480px) {
