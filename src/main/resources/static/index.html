@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,61 +8,85 @@
 </head>
 <body>
 
-    <div class="container">
+<main class="container">
 
-        <div class="topo">
-            <img src="images/logo.png" class="logo">
-            <h1>Sorteador UMADEB</h1>
-        </div>
+    <header class="topo">
+        <img src="images/logo.png" alt="Logo UMADEB" class="logo">
+        <h1>Sorteador UMADEB</h1>
+    </header>
 
-        <div class="conteudo">
+    <section class="conteudo">
 
-            <span id="contador"></span>
+        <span id="contador"></span>
 
-            <p class="descricao">Digite os nomes separados por vírgula</p>
+        <p class="descricao">
+            Digite os nomes separados por vírgula
+        </p>
 
-            <div class="campo-nomes">
+        <div class="campo-nomes">
                 <textarea
                         id="nomes"
                         rows="3"
                         placeholder="Ex: Gabriel, Karla, Ricardo"
                         oninput="autoResize(this); atualizarContador()"
                 ></textarea>
-            </div>
+        </div>
 
-            <div class="acoes">
-                <button id="btnListas" type="button" onclick="abrirModal()">Participantes</button>
-                <button id="btnLimpar" type="button" onclick="limparNomes()" class="btn-secundario">Limpar</button>
-            </div>
+        <div class="acoes">
+            <button id="btnListas" type="button" onclick="abrirModal()">
+                Participantes
+            </button>
 
-            <button id="btnSortear" onclick="sortear()">Sortear</button>
+            <button id="btnLimpar" type="button" onclick="limparNomes()" class="btn-secundario">
+                Limpar
+            </button>
+        </div>
 
-            <h2 id="resultado"></h2>
+        <button id="btnSortear" type="button" onclick="sortear()">
+            Sortear
+        </button>
+
+        <h2 id="resultado"></h2>
+
+    </section>
+
+</main>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+
+        <h3>Participantes</h3>
+
+        <div id="participantes"></div>
+
+        <div class="adicionar">
+            <input
+                    type="text"
+                    id="novoParticipante"
+                    placeholder="Nome do participante"
+            >
+            <button type="button" onclick="adicionarParticipante()">
+                Adicionar
+            </button>
+        </div>
+
+        <div class="acoes-modal">
+            <button type="button" onclick="salvarParticipantes()">
+                Salvar lista
+            </button>
+
+            <button type="button" onclick="adicionarAoSorteio()">
+                Adicionar ao sorteio
+            </button>
+
+            <button type="button" onclick="fecharModal()">
+                Fechar
+            </button>
         </div>
 
     </div>
+</div>
 
-    <div id="modal" class="modal">
-        <div class="modal-content">
-
-            <h3>Participantes</h3>
-
-            <div id="participantes"></div>
-
-            <div class="adicionar">
-                <input type="text" id="novoParticipante" placeholder="Nome do participante">
-                <button onclick="adicionarParticipante()">Adicionar</button>
-            </div>
-
-            <div class="acoes-modal">
-                <button onclick="salvarParticipantes()">Salvar lista</button>
-                <button onclick="adicionarAoSorteio()">Adicionar ao sorteio</button>
-                <button onclick="fecharModal()">Fechar</button>
-            </div>
-
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

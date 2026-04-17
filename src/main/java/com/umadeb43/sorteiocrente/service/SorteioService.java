@@ -1,11 +1,14 @@
 package com.umadeb43.sorteiocrente.service;
 
 import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class SorteioService {
+
+    private final SecureRandom random = new SecureRandom();
 
     public String sortear(List<String> nomes) {
 
@@ -13,11 +16,8 @@ public class SorteioService {
             return "Lista Vazia";
         }
 
-        Random random = new  Random();
-
         int indice = random.nextInt(nomes.size());
 
         return nomes.get(indice);
     }
-
 }

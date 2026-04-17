@@ -1,3 +1,11 @@
+const API_URL = window.location.hostname.includes("localhost")
+    ? "http://localhost:8080"
+    : "https://sorteio-crente-production.up.railway.app";
+
+/* =========================
+   UTIL
+========================= */
+
 function autoResize(el) {
     el.style.height = "auto";
     el.style.height = el.scrollHeight + "px";
@@ -7,7 +15,7 @@ function capitalizarNome(nome) {
     return nome
         .toLowerCase()
         .split(" ")
-        .filter(p => p !== "")
+        .filter(p => p)
         .map(p => p.charAt(0).toUpperCase() + p.slice(1))
         .join(" ");
 }
@@ -16,14 +24,22 @@ function tratarNomes(texto) {
     return texto
         .split(",")
         .map(nome => capitalizarNome(nome.trim()))
-        .filter(nome => nome !== "")
-        .filter((nome, index, array) => array.indexOf(nome) === index);
+        .filter(nome => nome)
+        .filter((nome, i, arr) => arr.indexOf(nome) === i);
 }
+
+/* =========================
+   CONTADOR
+========================= */
 
 function atualizarContador() {
     const nomes = tratarNomes(document.getElementById("nomes").value);
     document.getElementById("contador").innerText = `Nomes: ${nomes.length}`;
 }
+
+/* =========================
+   SORTEIO
+========================= */
 
 function animarSorteio(nomes, elemento) {
     let i = 0;
@@ -43,73 +59,74 @@ function animarSorteio(nomes, elemento) {
     });
 }
 
-document.getElementById("nomes").addEventListener("keydown", function(e) {
-    if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sortear();
-    }
-});
-
 async function sortear() {
     const textarea = document.getElementById("nomes");
     const resultado = document.getElementById("resultado");
+
     const botao = document.getElementById("btnSortear");
     const btnListas = document.getElementById("btnListas");
     const btnLimpar = document.getElementById("btnLimpar");
 
+    const nomes = tratarNomes(textarea.value);
 
-    let nomes = tratarNomes(textarea.value);
-
-    if (nomes.length === 0) {
+    if (!nomes.length) {
         resultado.innerText = "Digite pelo menos um nome válido!";
         resultado.classList.add("resultado-final");
         return;
     }
 
-    botao.classList.add("loading");
-    btnListas.classList.add("loading");
-    btnLimpar.classList.add("loading");
-    botao.innerText = "Sorteando...";
-    botao.disabled = true;
-    btnListas.disabled = true;
-    btnLimpar.disabled = true;
-
+    setLoading(true);
 
     await animarSorteio(nomes, resultado);
 
     try {
-        const response = await fetch(`https://sorteio-crente-production.up.railway.app/sortear?nomes=${nomes.join(",")}`)
+        const response = await fetch(`${API_URL}/sortear?nomes=${nomes.join(",")}`);
         const data = await response.json();
 
         resultado.classList.remove("resultado-final");
         void resultado.offsetWidth;
+
         resultado.innerText = "🎉 " + data.nome;
         resultado.classList.add("resultado-final");
 
         resultado.scrollIntoView({ behavior: "smooth" });
 
     } catch (error) {
-        console.error("Erro:", error);
+        console.error(error);
         resultado.innerText = "Erro ao conectar com o servidor";
         resultado.classList.add("resultado-final");
     }
 
-    botao.classList.remove("loading");
-    btnListas.classList.remove("loading");
-    btnLimpar.classList.remove("loading");
-    botao.innerText = "Sortear";
-    botao.disabled = false;
-    btnListas.disabled = false;
-    btnLimpar.disabled = false;
+    setLoading(false);
 }
 
-const textarea = document.getElementById("nomes");
+function setLoading(isLoading) {
+    const botao = document.getElementById("btnSortear");
+    const btnListas = document.getElementById("btnListas");
+    const btnLimpar = document.getElementById("btnLimpar");
+
+    [botao, btnListas, btnLimpar].forEach(btn => {
+        btn.disabled = isLoading;
+        btn.classList.toggle("loading", isLoading);
+    });
+
+    botao.innerText = isLoading ? "Sorteando..." : "Sortear";
+}
+
+document.getElementById("nomes").addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sortear();
+    }
+});
 
 function isMobile() {
     return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 }
 
 if (isMobile()) {
+    const textarea = document.getElementById("nomes");
+
     textarea.addEventListener("focus", () => {
         document.body.style.alignItems = "flex-start";
         document.body.style.paddingTop = "40px";
@@ -124,16 +141,10 @@ if (isMobile()) {
 }
 
 function limparNomes() {
-    const textarea = document.getElementById("nomes");
-    const resultado = document.getElementById("resultado");
-
-    textarea.value = "";
-    resultado.innerText = "";
-
+    document.getElementById("nomes").value = "";
+    document.getElementById("resultado").innerText = "";
     atualizarContador();
 }
-
-const API_URL = "http://localhost:8080";
 
 async function abrirModal() {
     const btn = document.getElementById("btnListas");
@@ -148,26 +159,7 @@ async function abrirModal() {
         const response = await fetch(`${API_URL}/participantes`);
         const lista = await response.json();
 
-        const container = document.getElementById("participantes");
-        container.innerHTML = "";
-
-        if (lista.length === 0) {
-            container.innerHTML = "<p>Nenhum participante ainda</p>";
-            return;
-        }
-
-        lista.forEach(nome => {
-            const div = document.createElement("div");
-            div.className = "participante";
-
-            div.innerHTML = `
-                <input type="checkbox" value="${nome}">
-                <label>${nome}</label>
-                <button class="btn-remover" onclick="removerParticipante(event)">❌</button>
-            `;
-
-            container.appendChild(div);
-        });
+        renderParticipantes(lista);
 
     } catch (error) {
         console.error(error);
@@ -179,33 +171,38 @@ async function abrirModal() {
 }
 
 function fecharModal() {
-    const modal = document.getElementById("modal");
+    document.getElementById("modal").style.display = "none";
+
     const btn = document.getElementById("btnListas");
-
-    modal.style.display = "none";
-
     btn.classList.remove("loading");
     btn.disabled = false;
 }
 
-function adicionarAoSorteio() {
-    const checkboxes = document.querySelectorAll("#participantes input:checked");
+function renderParticipantes(lista) {
+    const container = document.getElementById("participantes");
+    container.innerHTML = "";
 
-    const novos = Array.from(checkboxes).map(cb => cb.value);
+    if (!lista.length) {
+        container.innerHTML = "<p>Nenhum participante ainda</p>";
+        return;
+    }
 
-    const textarea = document.getElementById("nomes");
+    lista.forEach(nome => {
+        container.appendChild(criarElementoParticipante(nome));
+    });
+}
 
-    const atuais = textarea.value
-        ? textarea.value.split(",").map(n => n.trim())
-        : [];
+function criarElementoParticipante(nome) {
+    const div = document.createElement("div");
+    div.className = "participante";
 
-    const combinados = [...new Set([...atuais, ...novos])];
+    div.innerHTML = `
+        <input type="checkbox" value="${nome}">
+        <label>${nome}</label>
+        <button class="btn-remover" onclick="removerParticipante(event)">❌</button>
+    `;
 
-    textarea.value = combinados.join(", ");
-
-    atualizarContador();
-
-    fecharModal();
+    return div;
 }
 
 function adicionarParticipante() {
@@ -215,24 +212,38 @@ function adicionarParticipante() {
     if (!nome) return;
 
     const container = document.getElementById("participantes");
-
-    const div = document.createElement("div");
-    div.className = "participante";
-
-    div.innerHTML = `
-        <input type="checkbox" value="${nome}" checked>
-        <label>${nome}</label>
-    `;
-
-    container.appendChild(div);
+    container.appendChild(criarElementoParticipante(nome));
 
     input.value = "";
 }
 
-async function salvarParticipantes() {
-    const checkboxes = document.querySelectorAll("#participantes input");
+function removerParticipante(event) {
+    event.target.closest(".participante")?.remove();
+}
 
-    const lista = Array.from(checkboxes).map(cb => cb.value);
+function adicionarAoSorteio() {
+    const selecionados = Array.from(
+        document.querySelectorAll("#participantes input:checked")
+    ).map(cb => cb.value);
+
+    const textarea = document.getElementById("nomes");
+
+    const atuais = textarea.value
+        ? textarea.value.split(",").map(n => n.trim())
+        : [];
+
+    const combinados = [...new Set([...atuais, ...selecionados])];
+
+    textarea.value = combinados.join(", ");
+    atualizarContador();
+
+    fecharModal();
+}
+
+async function salvarParticipantes() {
+    const lista = Array.from(
+        document.querySelectorAll("#participantes input")
+    ).map(cb => cb.value);
 
     try {
         await fetch(`${API_URL}/participantes`, {
@@ -248,13 +259,5 @@ async function salvarParticipantes() {
     } catch (error) {
         console.error(error);
         alert("Erro ao salvar lista");
-    }
-}
-
-function removerParticipante(event) {
-    const item = event.target.closest(".participante");
-
-    if (item) {
-        item.remove();
     }
 }

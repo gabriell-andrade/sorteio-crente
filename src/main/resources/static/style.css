@@ -1,5 +1,7 @@
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html, body {
@@ -7,33 +9,34 @@ html, body {
 }
 
 body {
-    margin: 0;
     min-height: 100dvh;
-    overflow: hidden;
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #D2B89C, #e8d3b5);
+
     display: flex;
     justify-content: center;
     align-items: center;
+
     padding: 20px;
 }
 
 .container {
-    position: relative;
     background: #f5e6d3;
     padding: 25px;
     border-radius: 20px;
+
     width: 100%;
     max-width: 400px;
+
     box-shadow:
             0 10px 25px rgba(0, 0, 0, 0.15),
             0 5px 10px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
+
     transition: 0.3s;
 }
 
 .container:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
 }
 
 .topo {
@@ -41,8 +44,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: 12px;
+
     margin-bottom: 10px;
-    padding: 10px 0;
 }
 
 .logo {
@@ -53,14 +56,12 @@ body {
 h1 {
     color: #7A2E1F;
     font-size: 24px;
-    margin: 0;
     font-weight: 600;
     letter-spacing: 0.5px;
-    white-space: nowrap;
 }
 
 .conteudo {
-    margin-top: 25px;
+    margin-top: 20px;
     text-align: center;
 }
 
@@ -79,11 +80,12 @@ textarea {
     width: 100%;
     min-height: 80px;
     padding: 12px;
+
     border-radius: 10px;
     border: 1px solid #B89A7A;
+
     font-size: 16px;
     resize: none;
-    overflow: hidden;
     outline: none;
 }
 
@@ -97,10 +99,12 @@ textarea::placeholder {
 
 #contador {
     position: absolute;
-    top: 12px;
-    right: 16px;
+    top: 10px;
+    right: 12px;
+
     font-size: 11px;
     color: #7A2E1F;
+
     background: rgba(0, 0, 0, 0.05);
     padding: 4px 8px;
     border-radius: 10px;
@@ -114,12 +118,16 @@ textarea::placeholder {
 button {
     width: 100%;
     padding: 12px;
+
     border: none;
     border-radius: 10px;
+
     background: linear-gradient(135deg, #D83A2E, #ff6b5e);
     color: white;
+
     font-size: 16px;
     cursor: pointer;
+
     transition: 0.2s;
 }
 
@@ -131,19 +139,39 @@ button:active {
     transform: scale(0.97);
 }
 
+.btn-secundario {
+    background: #B89A7A;
+}
+
+.btn-secundario:hover {
+    background: #a18464;
+}
+
 button.loading {
     background: #999;
     cursor: not-allowed;
 }
 
+.acoes {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.acoes button {
+    flex: 1;
+}
 
 #resultado {
     margin-top: 20px;
+
     font-size: 22px;
-    color: #7A2E1F;
     font-weight: bold;
+    color: #7A2E1F;
+
     padding: 10px;
     border-radius: 10px;
+
     background: rgba(216, 58, 46, 0.1);
 }
 
@@ -151,11 +179,10 @@ button.loading {
     display: none;
 }
 
-
 @keyframes aparecer {
     from {
         opacity: 0;
-        transform: translateY(10px) scale(0.9);
+        transform: translateY(10px) scale(0.95);
     }
     to {
         opacity: 1;
@@ -168,64 +195,57 @@ button.loading {
 }
 
 @keyframes piscar {
-    0% { opacity: 0.2; }
+    0% { opacity: 0.3; }
     50% { opacity: 1; }
-    100% { opacity: 0.2; }
+    100% { opacity: 0.3; }
 }
 
 .animando {
     animation: piscar 0.5s infinite;
 }
 
-.acoes {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px
-}
-
-.acoes button {
-    flex: 1;
-}
-
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0, 0, 0, 0.5);
+    inset: 0;
 
     display: none;
-
     justify-content: center;
     align-items: center;
 
-    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(3px);
+
+    z-index: 9999;
 }
 
 .modal-content {
     background: #f5e6d3;
     padding: 20px;
+
     border-radius: 15px;
     width: 90%;
     max-width: 320px;
 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+#participantes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .participante {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 8px;
-    margin-bottom: 4px;
-}
-
-.participante input {
-    margin: 0;
 }
 
 .participante label {
@@ -235,44 +255,41 @@ button.loading {
 }
 
 .btn-remover {
-    width: auto !important;
-    padding: 0 !important;
-    background: transparent !important;
+    width: auto;
+    padding: 4px;
+
+    background: transparent;
     border: none;
+
     cursor: pointer;
     font-size: 16px;
     color: #D83A2E;
 }
 
-.btn-remover:hover {
-    background: transparent !important;
-    transform: none !important;
-}
-
 .adicionar {
     display: flex;
     gap: 8px;
-    margin-top: 10px;
+}
+
+.adicionar input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #B89A7A;
 }
 
 .acoes-modal {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-top: 12px;
 }
 
 @media (max-width: 480px) {
-    .logo {
-        width: 80px;
-    }
-
     h1 {
-        font-size: 26px;
-        white-space: nowrap;
+        font-size: 20px;
     }
 
-    .topo {
-        gap: 10px;
+    .logo {
+        width: 60px;
     }
 }
