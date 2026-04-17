@@ -186,7 +186,15 @@ function criarElementoParticipante(nome) {
 
     div.innerHTML = `
         <input type="checkbox" value="${nome}">
-        <label>${nome}</label>
+        
+        <input 
+            type="text" 
+            value="${nome}" 
+            class="nome-editavel" 
+            disabled
+        >
+
+        <button class="btn-editar" onclick="habilitarEdicao(event)">✏️</button>
         <button class="btn-remover" onclick="removerParticipante(event)">❌</button>
     `;
 
@@ -249,3 +257,19 @@ async function salvarParticipantes() {
         alert("Erro ao salvar lista");
     }
 }
+
+function habilitarEdicao(event) {
+    const item = event.target.closest(".participante");
+    const input = item.querySelector(".nome-editavel");
+
+    input.disabled = false;
+    input.focus();
+
+    input.selectionStart = input.value.length;
+}
+
+document.addEventListener("blur", function (e) {
+    if (e.target.classList.contains("nome-editavel")) {
+        e.target.disabled = true;
+    }
+}, true);

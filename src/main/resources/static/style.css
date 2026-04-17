@@ -236,7 +236,7 @@ button.loading {
 #participantes {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 
     max-height: 200px;
     overflow-y: auto;
@@ -245,13 +245,22 @@ button.loading {
 .participante {
     display: flex;
     align-items: center;
-    gap: 8px;
+
+    gap: 6px;
+    padding: 3px 4px;
+
+    border-radius: 6px;
 }
 
 .participante label {
     flex: 1;
     text-align: left;
     font-size: 14px;
+}
+
+.participante input[type="checkbox"] {
+    margin: 0;
+    flex-shrink: 0;
 }
 
 .btn-remover {
@@ -296,6 +305,47 @@ button.loading {
 
 .btn-principal {
     width: 100%;
+}
+
+.nome-editavel {
+    flex: 1;
+    min-width: 0;
+
+    border: none;
+    background: transparent;
+
+    font-size: 14px;
+    outline: none;
+}
+
+.btn-editar {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #2ecc71;
+    font-size: 16px;
+}
+
+.btn-remover {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #D83A2E;
+    font-size: 16px;
+}
+
+.btn-editar,
+.btn-remover {
+    flex-shrink: 0;
+
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
 }
 
 @media (max-width: 480px) {
