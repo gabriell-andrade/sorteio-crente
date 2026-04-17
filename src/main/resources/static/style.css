@@ -243,6 +243,8 @@ button.loading {
 }
 
 .participante {
+    position: relative;
+
     display: flex;
     align-items: center;
 
@@ -316,6 +318,8 @@ button.loading {
 
     font-size: 14px;
     outline: none;
+
+    padding-right: 50px;
 }
 
 .btn-editar {
@@ -336,16 +340,28 @@ button.loading {
 
 .btn-editar,
 .btn-remover {
-    flex-shrink: 0;
+    position: absolute;
 
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
 
     display: none;
     align-items: center;
     justify-content: center;
 
     padding: 0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-editar {
+    right: 28px;
+    color: #2ecc71;
+}
+
+.btn-remover {
+    right: 4px;
+    color: #D83A2E;
 }
 
 .modal-header {
