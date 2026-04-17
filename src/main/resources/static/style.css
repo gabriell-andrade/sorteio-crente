@@ -216,6 +216,52 @@ button.loading {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
+.participante {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.participante input {
+    margin: 0;
+}
+
+.participante label {
+    flex: 1;
+    text-align: left;
+    font-size: 14px;
+}
+
+.btn-remover {
+    width: auto !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #D83A2E;
+}
+
+.btn-remover:hover {
+    background: transparent !important;
+    transform: none !important;
+}
+
+.adicionar {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.acoes-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
 @media (max-width: 480px) {
     .logo {
         width: 80px;

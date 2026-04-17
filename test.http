@@ -1,11 +1,8 @@
-POST http://localhost:8080/listas
+POST http://localhost:8080/participantes
 Content-Type: application/json
 
-{
-  "nome": "jovens",
-  "participantes": ["Gabriel", "Karla", "Ricardo"]
-}
+["Gabriel", "Karla", "Ricardo"]
 
 ###
 
-GET http://localhost:8080/listas
+GET http://localhost:8080/listas/jovens

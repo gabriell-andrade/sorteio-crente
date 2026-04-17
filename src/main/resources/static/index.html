@@ -31,7 +31,7 @@
             </div>
 
             <div class="acoes">
-                <button id="btnListas" type="button" onclick="abrirModal()">Listas</button>
+                <button id="btnListas" type="button" onclick="abrirModal()">Participantes</button>
                 <button id="btnLimpar" type="button" onclick="limparNomes()" class="btn-secundario">Limpar</button>
             </div>
 
@@ -44,11 +44,22 @@
 
     <div id="modal" class="modal">
         <div class="modal-content">
-            <h3>Listas</h3>
 
-            <select id="listaModal"></select>
+            <h3>Participantes</h3>
 
-            <button onclick="fecharModal()">Fechar</button>
+            <div id="participantes"></div>
+
+            <div class="adicionar">
+                <input type="text" id="novoParticipante" placeholder="Nome do participante">
+                <button onclick="adicionarParticipante()">Adicionar</button>
+            </div>
+
+            <div class="acoes-modal">
+                <button onclick="salvarParticipantes()">Salvar lista</button>
+                <button onclick="adicionarAoSorteio()">Adicionar ao sorteio</button>
+                <button onclick="fecharModal()">Fechar</button>
+            </div>
+
         </div>
     </div>
 

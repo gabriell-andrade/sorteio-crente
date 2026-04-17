@@ -145,27 +145,33 @@ async function abrirModal() {
     modal.style.display = "flex";
 
     try {
-        const response = await fetch(`${API_URL}/listas`);
-        const data = await response.json();
+        const response = await fetch(`${API_URL}/participantes`);
+        const lista = await response.json();
 
-        const select = document.getElementById("listaModal");
-        select.innerHTML = "";
+        const container = document.getElementById("participantes");
+        container.innerHTML = "";
 
-        if (Object.keys(data).length === 0) {
-            select.innerHTML = "<option>Nenhuma lista encontrada</option>";
+        if (lista.length === 0) {
+            container.innerHTML = "<p>Nenhum participante ainda</p>";
             return;
         }
 
-        Object.keys(data).forEach(nome => {
-            const option = document.createElement("option");
-            option.value = nome;
-            option.textContent = nome;
-            select.appendChild(option);
+        lista.forEach(nome => {
+            const div = document.createElement("div");
+            div.className = "participante";
+
+            div.innerHTML = `
+                <input type="checkbox" value="${nome}">
+                <label>${nome}</label>
+                <button class="btn-remover" onclick="removerParticipante(event)">❌</button>
+            `;
+
+            container.appendChild(div);
         });
 
     } catch (error) {
-        console.error("Erro ao carregar listas:", error);
-        alert("Erro ao carregar listas");
+        console.error(error);
+        alert("Erro ao carregar participantes");
     }
 
     btn.classList.remove("loading");
@@ -176,10 +182,79 @@ function fecharModal() {
     const modal = document.getElementById("modal");
     const btn = document.getElementById("btnListas");
 
-    if (modal) modal.style.display = "none";
+    modal.style.display = "none";
 
-    if (btn) {
-        btn.classList.remove("loading");
-        btn.disabled = false;
+    btn.classList.remove("loading");
+    btn.disabled = false;
+}
+
+function adicionarAoSorteio() {
+    const checkboxes = document.querySelectorAll("#participantes input:checked");
+
+    const novos = Array.from(checkboxes).map(cb => cb.value);
+
+    const textarea = document.getElementById("nomes");
+
+    const atuais = textarea.value
+        ? textarea.value.split(",").map(n => n.trim())
+        : [];
+
+    const combinados = [...new Set([...atuais, ...novos])];
+
+    textarea.value = combinados.join(", ");
+
+    atualizarContador();
+
+    fecharModal();
+}
+
+function adicionarParticipante() {
+    const input = document.getElementById("novoParticipante");
+    const nome = input.value.trim();
+
+    if (!nome) return;
+
+    const container = document.getElementById("participantes");
+
+    const div = document.createElement("div");
+    div.className = "participante";
+
+    div.innerHTML = `
+        <input type="checkbox" value="${nome}" checked>
+        <label>${nome}</label>
+    `;
+
+    container.appendChild(div);
+
+    input.value = "";
+}
+
+async function salvarParticipantes() {
+    const checkboxes = document.querySelectorAll("#participantes input");
+
+    const lista = Array.from(checkboxes).map(cb => cb.value);
+
+    try {
+        await fetch(`${API_URL}/participantes`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(lista)
+        });
+
+        alert("Lista salva com sucesso!");
+
+    } catch (error) {
+        console.error(error);
+        alert("Erro ao salvar lista");
+    }
+}
+
+function removerParticipante(event) {
+    const item = event.target.closest(".participante");
+
+    if (item) {
+        item.remove();
     }
 }

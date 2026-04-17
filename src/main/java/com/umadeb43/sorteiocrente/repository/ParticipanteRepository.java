@@ -1,4 +1,7 @@
 package com.umadeb43.sorteiocrente.repository;
 
-public class ParticipanteRepository {
+import com.umadeb43.sorteiocrente.model.Participante;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ParticipanteRepository extends JpaRepository<Participante, Long> {
 }
