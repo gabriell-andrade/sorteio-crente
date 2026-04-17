@@ -71,17 +71,16 @@
         </div>
 
         <div class="acoes-modal">
-            <button type="button" onclick="salvarParticipantes()">
-                Salvar lista
-            </button>
 
-            <button type="button" onclick="adicionarAoSorteio()">
+            <div class="linha-botoes">
+                <button onclick="salvarParticipantes()">Salvar lista</button>
+                <button onclick="fecharModal()" class="btn-secundario">Sair</button>
+            </div>
+
+            <button onclick="adicionarAoSorteio()" class="btn-principal">
                 Adicionar ao sorteio
             </button>
 
-            <button type="button" onclick="fecharModal()">
-                Fechar
-            </button>
         </div>
 
     </div>
