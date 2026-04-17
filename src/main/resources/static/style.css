@@ -254,6 +254,9 @@ button.loading {
     background: rgba(0, 0, 0, 0.04);
 
     overflow: hidden;
+
+    cursor: pointer;
+    transition: 0.2s;
 }
 
 .participante label {
@@ -320,6 +323,7 @@ button.loading {
 
     font-size: 13px;
     outline: none;
+    pointer-events: none;
 }
 
 .btn-editar {
@@ -414,6 +418,15 @@ button.loading {
     display: flex;
     gap: 4px;
     flex-shrink: 0;
+}
+
+.acoes-item button {
+    pointer-events: auto;
+}
+
+.participante.selecionado {
+    background: rgba(216, 58, 46, 0.15);
+    border: 1px solid #D83A2E;
 }
 
 @media (max-width: 480px) {

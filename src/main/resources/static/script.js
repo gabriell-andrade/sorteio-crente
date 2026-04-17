@@ -195,8 +195,6 @@ function criarElementoParticipante(nome) {
     div.className = "participante";
 
     div.innerHTML = `
-        <input type="checkbox">
-
         <input 
             type="text" 
             value="${nome}" 
@@ -205,10 +203,21 @@ function criarElementoParticipante(nome) {
         >
 
         <div class="acoes-item">
-            <button class="btn-editar" onclick="habilitarEdicao(event)">✏️</button>
-            <button class="btn-remover" onclick="removerParticipante(event)">❌</button>
+            <button class="btn-editar" onclick="event.stopPropagation(); habilitarEdicao(event)">✏️</button>
+            <button class="btn-remover" onclick="event.stopPropagation(); removerParticipante(event)">❌</button>
         </div>
     `;
+
+    div.addEventListener("click", () => {
+
+        const modal = document.querySelector(".modal-content");
+
+        if (modal.classList.contains("modo-edicao")) {
+            return;
+        }
+
+        div.classList.toggle("selecionado");
+    });
 
     return div;
 }
@@ -231,10 +240,8 @@ function removerParticipante(event) {
 
 function adicionarAoSorteio() {
     const selecionados = Array.from(
-        document.querySelectorAll("#participantes .participante")
-    )
-        .filter(p => p.querySelector("input[type='checkbox']").checked)
-        .map(p => p.querySelector(".nome-editavel").value.trim());
+        document.querySelectorAll(".participante.selecionado")
+    ).map(p => p.querySelector(".nome-editavel").value.trim());
 
     const textarea = document.getElementById("nomes");
 
@@ -278,15 +285,22 @@ function habilitarEdicao(event) {
     const input = item.querySelector(".nome-editavel");
 
     input.disabled = false;
-    input.focus();
+    input.style.pointerEvents = "auto";
 
+    input.focus();
     input.selectionStart = input.value.length;
 
     input.addEventListener("blur", () => {
-        input.disabled = true;
+        let novoValor = input.value.trim();
 
-        const checkbox = item.querySelector("input[type='checkbox']");
-        checkbox.value = input.value.trim();
+        if (!novoValor) {
+            novoValor = "Sem nome";
+        }
+
+        input.value = novoValor;
+
+        input.disabled = true;
+        input.style.pointerEvents = "none";
     }, { once: true });
 }
 
