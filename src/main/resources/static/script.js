@@ -166,11 +166,14 @@ async function abrirModal() {
 }
 
 function fecharModal() {
-    document.getElementById("modal").style.display = "none";
+    const modal = document.getElementById("modal");
+    const conteudo = document.querySelector(".modal-content");
+    const btn = document.getElementById("btnEditarModo");
 
-    const btn = document.getElementById("btnListas");
-    btn.classList.remove("loading");
-    btn.disabled = false;
+    modal.style.display = "none";
+
+    conteudo.classList.remove("modo-edicao");
+    btn.innerText = "Editar";
 }
 
 function renderParticipantes(lista) {
@@ -291,14 +294,31 @@ document.addEventListener("blur", function (e) {
     }
 }, true);
 
-let modoEdicao = false;
-
 function toggleModoEdicao() {
     const modal = document.querySelector(".modal-content");
     const botao = document.getElementById("btnEditarModo");
 
-    modal.classList.toggle("modo-edicao");
+    const estaEditando = modal.classList.contains("modo-edicao");
 
-    const ativo = modal.classList.contains("modo-edicao");
-    botao.innerText = ativo ? "Concluir" : "Editar";
+    if (estaEditando) {
+        modal.classList.remove("modo-edicao");
+        botao.innerText = "Editar";
+
+        salvarParticipantes();
+    } else {
+        modal.classList.add("modo-edicao");
+        botao.innerText = "Salvar";
+    }
+}
+
+let modoEdicao = false;
+
+function salvarModoEdicao() {
+    const modal = document.querySelector(".modal-content");
+    const botao = document.getElementById("btnEditarModo");
+
+    modal.classList.remove("modo-edicao");
+
+    botao.innerText = "Editar";
+
 }
