@@ -195,8 +195,8 @@ function criarElementoParticipante(nome) {
     div.className = "participante";
 
     div.innerHTML = `
-        <input type="checkbox" value="${nome}">
-        
+        <input type="checkbox">
+
         <input 
             type="text" 
             value="${nome}" 
@@ -204,8 +204,10 @@ function criarElementoParticipante(nome) {
             disabled
         >
 
-        <button class="btn-editar" onclick="habilitarEdicao(event)">✏️</button>
-        <button class="btn-remover" onclick="removerParticipante(event)">❌</button>
+        <div class="acoes-item">
+            <button class="btn-editar" onclick="habilitarEdicao(event)">✏️</button>
+            <button class="btn-remover" onclick="removerParticipante(event)">❌</button>
+        </div>
     `;
 
     return div;

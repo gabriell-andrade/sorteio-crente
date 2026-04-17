@@ -235,24 +235,25 @@ button.loading {
 }
 
 #participantes {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
 
-    max-height: 300px;
-    overflow-y: auto;
+    max-height: none;
+    overflow-y: visible;
 }
 
 .participante {
-    position: relative;
-
     display: flex;
     align-items: center;
 
     gap: 6px;
-    padding: 3px 4px;
+    padding: 6px 8px;
 
-    border-radius: 6px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.04);
+
+    overflow: hidden;
 }
 
 .participante label {
@@ -317,10 +318,8 @@ button.loading {
     border: none;
     background: transparent;
 
-    font-size: 14px;
+    font-size: 13px;
     outline: none;
-
-    padding-right: 50px;
 }
 
 .btn-editar {
@@ -341,18 +340,14 @@ button.loading {
 
 .btn-editar,
 .btn-remover {
-    position: absolute;
+    width: 18px;
+    height: 18px;
 
-    width: 22px;
-    height: 22px;
+    font-size: 12px;
 
     display: none;
     align-items: center;
     justify-content: center;
-
-    padding: 0;
-    font-size: 14px;
-    cursor: pointer;
 }
 
 .btn-editar {
@@ -408,6 +403,17 @@ button.loading {
 
 .linha-botoes button {
     flex: 1;
+}
+
+.participante .acoes-item {
+    display: flex;
+    gap: 4px;
+}
+
+.acoes-item {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
 }
 
 @media (max-width: 480px) {
