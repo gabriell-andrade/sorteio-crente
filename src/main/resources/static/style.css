@@ -226,6 +226,8 @@ button.loading {
     border-radius: 15px;
     width: 95%;
     max-width: 480px;
+    max-height: 90dvh;
+    overflow-y: auto;
 
     display: flex;
     flex-direction: column;
@@ -239,8 +241,8 @@ button.loading {
     grid-template-columns: 1fr 1fr;
     gap: 6px;
 
-    max-height: none;
-    overflow-y: visible;
+    max-height: 50dvh;
+    overflow-y: auto;
 }
 
 .participante {

@@ -1,8 +1,24 @@
-POST http://localhost:8080/participantes
+POST http://localhost:8080/api/v1/participantes
 Content-Type: application/json
 
-["Gabriel", "Karla", "Ricardo"]
+{
+	"nomes": ["Gabriel", "Karla", "Ricardo"]
+}
 
 ###
 
-GET http://localhost:8080/listas/jovens
+GET http://localhost:8080/api/v1/participantes
+
+###
+
+POST http://localhost:8080/api/v1/sorteios
+Content-Type: application/json
+
+{
+	"nomes": ["Gabriel", "Karla", "Ricardo"],
+	"quantidade": 1
+}
+
+###
+
+GET http://localhost:8080/api/v1/sorteios?pagina=0&tamanho=20

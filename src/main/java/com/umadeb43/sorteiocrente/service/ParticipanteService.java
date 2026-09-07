@@ -2,6 +2,7 @@ package com.umadeb43.sorteiocrente.service;
 
 import com.umadeb43.sorteiocrente.model.Participante;
 import com.umadeb43.sorteiocrente.repository.ParticipanteRepository;
+import com.umadeb43.sorteiocrente.util.NomeUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +25,7 @@ public class ParticipanteService {
 
     @Transactional
     public void salvar(List<String> nomes) {
-        List<Participante> lista = nomes.stream()
-                .map(String::trim)
-                .filter(nome -> !nome.isEmpty())
-                .distinct()
+        List<Participante> lista = NomeUtils.normalizarUnicos(nomes).stream()
                 .map(Participante::new)
                 .toList();
 

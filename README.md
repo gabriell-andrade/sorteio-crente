@@ -51,7 +51,7 @@ sorteio-crente-main/
 
 ### ✅ Pré-requisitos
 
-- Java 17+
+- Java 21+
 - Maven
 - PostgreSQL 14+
 
@@ -128,15 +128,24 @@ http://localhost:8080
 
 ## 🔌 API
 
-### 📍 Endpoint
+### 📍 Endpoints
 
-GET /sortear?nomes=Gabriel,Karla,Ricardo
+GET /api/v1/participantes
 
-### 📤 Response
+POST /api/v1/participantes
+
+POST /api/v1/sorteios
+
+GET /api/v1/sorteios?pagina=0&tamanho=20
+
+DELETE /api/v1/sorteios
+
+### 📤 Exemplo de sorteio
 
 ```json
 {
-  "nome": "Karla"
+  "nomes": ["Gabriel", "Karla", "Ricardo"],
+  "quantidade": 1
 }
 ```
 

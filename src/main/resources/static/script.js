@@ -1,4 +1,5 @@
 const API_URL = "/api/v1";
+let sorteioEmAndamento = false;
 
 function autoResize(el) {
     el.style.height = "auto";
@@ -53,6 +54,8 @@ function animarSorteio(nomes, elemento) {
 }
 
 async function sortear() {
+    if (sorteioEmAndamento) return;
+
     const textarea = document.getElementById("nomes");
     const resultado = document.getElementById("resultado");
 
@@ -68,11 +71,12 @@ async function sortear() {
         return;
     }
 
+    sorteioEmAndamento = true;
     setLoading(true);
 
-    await animarSorteio(nomes, resultado);
-
     try {
+        await animarSorteio(nomes, resultado);
+
         const response = await fetch(`${API_URL}/sorteios`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -96,9 +100,10 @@ async function sortear() {
         console.error(error);
         resultado.innerText = error.message || "Erro ao conectar com o servidor";
         resultado.classList.add("resultado-final");
+    } finally {
+        sorteioEmAndamento = false;
+        setLoading(false);
     }
-
-    setLoading(false);
 }
 
 function setLoading(isLoading) {
