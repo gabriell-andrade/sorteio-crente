@@ -1,69 +1,57 @@
-# 🎲 Sorteio Crente
+# Sorteio UMADEB
 
-Aplicação web full stack desenvolvida com **Spring Boot** e **JavaScript** para realizar sorteios de forma simples, interativa e responsiva.
+Aplicacao web para organizar participantes e realizar sorteios de forma simples, responsiva e persistente.
 
----
+O projeto foi desenvolvido para uso da Igreja Assembleia de Deus Ministerio do Belem (UMADEB), com frontend estatico servido pelo proprio Spring Boot e dados armazenados em PostgreSQL.
 
-## 🌐 Aplicação online
+## Funcionalidades
 
-👉 https://sorteio-crente-production.up.railway.app
+- Cadastro e edicao da lista atual de participantes.
+- Normalizacao de nomes, removendo espacos extras e duplicidades sem diferenciar maiusculas e minusculas.
+- Sorteio de um ou mais vencedores.
+- Animacao visual durante o sorteio.
+- Historico persistente dos sorteios realizados.
+- Historico paginado pela API.
+- Interface responsiva para desktop e celular.
+- Modal de participantes com suporte a teclado, foco acessivel e reducao de movimento.
+- Reinicializacao automatica durante o desenvolvimento com Spring Boot DevTools.
 
----
+## Tecnologias
 
-## 🚀 Tecnologias utilizadas
-
-### 🔙 Backend
-
-- Java
-- Spring Boot
-- Maven
+- Java 21
+- Spring Boot 4
+- Spring Web MVC
+- Spring Data JPA e Hibernate
 - PostgreSQL
+- HTML, CSS e JavaScript
+- Maven Wrapper
 
-### 🔜 Frontend
+## Pre-requisitos
 
-- HTML5
-- CSS3
-- JavaScript
+- Java 21 ou superior.
+- PostgreSQL 14 ou superior.
 
----
+O projeto inclui o Maven Wrapper, portanto nao e necessario instalar o Maven separadamente.
 
-## 📂 Estrutura do projeto
+## Configuracao local
 
-```
-sorteio-crente-main/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── ... (controllers, services, etc.)
-│   │   └── resources/
-│   │       ├── static/
-│   │       │   ├── index.html
-│   │       │   ├── style.css
-│   │       │   └── script.js
-│   │       └── application.properties
-│   └── test/
-├── pom.xml
-```
+### PostgreSQL
 
----
-
-## ⚙️ Como executar o projeto
-
-### ✅ Pré-requisitos
-
-- Java 21+
-- Maven
-- PostgreSQL 14+
-
-### 🗄️ Configuração do PostgreSQL
-
-Crie o banco antes de iniciar a aplicação:
+Crie o banco de dados:
 
 ```sql
 CREATE DATABASE sorteio_crente;
 ```
 
-Por padrão, a aplicação conecta em `localhost:5432`, com usuário `postgres` e senha vazia. Para usar outros dados, configure as variáveis de ambiente:
+Por padrao, a aplicacao usa:
+
+```text
+URL:      jdbc:postgresql://localhost:5432/sorteio_crente
+Usuario:  postgres
+Senha:    vazia
+```
+
+Para configurar outros valores no PowerShell:
 
 ```powershell
 $env:SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/sorteio_crente"
@@ -71,109 +59,159 @@ $env:SPRING_DATASOURCE_USERNAME="postgres"
 $env:SPRING_DATASOURCE_PASSWORD="sua senha"
 ```
 
-As tabelas são criadas e atualizadas pelo Hibernate (`ddl-auto=update`). O Flyway foi separado para uma próxima etapa porque a versão PostgreSQL 18.6 usada localmente ainda não é reconhecida pelo Flyway disponível. Os nomes atuais ficam na tabela `participante`; os nomes usados em cada sorteio são preservados nas tabelas de histórico.
+Tambem e possivel copiar `src/main/resources/application-local.properties.example` para `application-local.properties`. Esse arquivo e ignorado pelo Git.
 
----
+O Hibernate usa `ddl-auto=update` e cria/atualiza as tabelas automaticamente. O nome atual dos participantes fica em `participante`; o historico usa `sorteios`, `sorteio_participantes` e `sorteio_vencedores`.
 
-### ▶️ Passo a passo
+### Perfil de desenvolvimento
 
-1. Clone o repositório:
+Os testes usam o perfil `dev`, que utiliza um banco H2 em memoria. Isso evita alterar o PostgreSQL local durante os testes:
 
-```bash
-git clone https://github.com/gabriell-andrade/sorteio-crente.git
-cd sorteio-crente-main
+```powershell
+$env:SPRING_PROFILES_ACTIVE="dev"
 ```
 
-2. Execute a aplicação:
+## Executando a aplicacao
 
-Linux/Mac:
+No Windows:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+No Linux ou macOS:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-Windows:
+Acesse:
 
-```bash
-mvnw.cmd spring-boot:run
+```text
+http://localhost:8080
 ```
 
----
+Para usar outra porta:
 
-### 🌐 Acesse no navegador
+```powershell
+$env:PORT="8081"
+.\mvnw.cmd spring-boot:run
+```
 
-http://localhost:8080
+Com o DevTools ativo, alteracoes compiladas reiniciam a aplicacao automaticamente. Alteracoes em arquivos estaticos podem exigir a recopia dos recursos ou um reinicio do processo:
 
----
+```powershell
+.\mvnw.cmd process-resources
+```
 
-## 💡 Funcionalidades
+## Testes
 
-- Inserção de participantes
-- Sorteio aleatório
-- Animação de sorteio (efeito roleta)
-- Contador dinâmico de nomes
-- Interface responsiva e otimizada para mobile
-- Feedback visual em tempo real
+Execute todos os testes com:
 
----
+```powershell
+.\mvnw.cmd test
+```
 
-## 🧠 Como funciona
+A suite cobre carregamento do contexto, regras do sorteio, paginacao do historico e normalizacao de nomes.
 
-1. O usuário insere os nomes separados por vírgula  
-2. O frontend envia os dados para o backend  
-3. O Spring Boot processa o sorteio  
-4. O resultado é retornado e exibido na tela  
+## API
 
----
+A API usa o prefixo `/api/v1`.
 
-## 🔌 API
+### Listar participantes
 
-### 📍 Endpoints
-
+```http
 GET /api/v1/participantes
+```
 
-POST /api/v1/participantes
-
-POST /api/v1/sorteios
-
-GET /api/v1/sorteios?pagina=0&tamanho=20
-
-DELETE /api/v1/sorteios
-
-### 📤 Exemplo de sorteio
+Resposta:
 
 ```json
+["Gabriel", "Karla", "Ricardo"]
+```
+
+### Salvar participantes
+
+Substitui a lista atual de participantes.
+
+```http
+POST /api/v1/participantes
+Content-Type: application/json
+
+{
+  "nomes": ["Gabriel", "Karla", "Ricardo"]
+}
+```
+
+### Realizar sorteio
+
+```http
+POST /api/v1/sorteios
+Content-Type: application/json
+
 {
   "nomes": ["Gabriel", "Karla", "Ricardo"],
   "quantidade": 1
 }
 ```
 
----
+Resposta:
 
-## 🎯 Objetivo do projeto
+```json
+{
+  "id": 1,
+  "vencedores": ["Karla"],
+  "realizadoEm": "2026-09-06T22:30:00Z"
+}
+```
 
-- Praticar desenvolvimento com Spring Boot
-- Criar e consumir APIs REST
-- Integrar frontend com backend
-- Aplicar conceitos de UX/UI
-- Simular um fluxo real de aplicação web
+### Listar historico
 
----
+A pagina inicia em zero. O tamanho permitido vai de 1 a 100.
 
-## 🙌 Contexto
+```http
+GET /api/v1/sorteios?pagina=0&tamanho=20
+```
 
-Este projeto foi desenvolvido de forma voluntária para uso na Igreja Assembleia de Deus Ministério do Belém
+A resposta segue o formato paginado do Spring Data, com `content`, `totalElements`, `totalPages`, `number` e demais metadados.
 
----
+### Limpar historico
 
-## 👨‍💻 Autores
+```http
+DELETE /api/v1/sorteios
+```
 
-| [<img src="https://avatars.githubusercontent.com/u/128552944?v=4" width="80"><br><sub>Gabriel Andrade</sub>](https://github.com/gabriell-andrade) | [<img src="https://avatars.githubusercontent.com/u/224125683?v=4" width="80"><br><sub>Karla Olimpio</sub>](https://github.com/karla-olimpio) |
-|:--:|:--:|
+### Testar a API
 
----
+O arquivo `test.http` possui exemplos prontos para uso com a extensao REST Client do VS Code.
 
-## 📄 Licença
+## Estrutura principal
 
-Este projeto está sob a licença MIT.
+```text
+src/main/java/com/umadeb43/sorteiocrente
+├── controller  # Endpoints REST
+├── dto         # Contratos de entrada e saida
+├── model       # Entidades JPA
+├── repository  # Repositorios Spring Data
+├── service     # Regras de negocio
+└── util        # Normalizacao compartilhada
+
+src/main/resources/static
+├── index.html  # Estrutura da interface
+├── script.js   # Interacoes e chamadas da API
+├── style.css   # Identidade visual e responsividade
+└── images      # Imagens da aplicacao
+```
+
+## Aplicacao online
+
+https://sorteio-crente-production.up.railway.app
+
+## Autores
+
+- Gabriel Andrade
+- Karla Olimpio
+
+## Licenca
+
+Este projeto esta sob a licenca MIT.
