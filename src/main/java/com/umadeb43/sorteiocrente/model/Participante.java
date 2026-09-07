@@ -3,6 +3,7 @@ package com.umadeb43.sorteiocrente.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "participante")
 public class Participante {
 
     @Id

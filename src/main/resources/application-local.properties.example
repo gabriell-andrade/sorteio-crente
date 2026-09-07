@@ -1,7 +1,7 @@
 # Copie este arquivo como application-local.properties (ele não será versionado).
-# Para usar PostgreSQL local, preencha os valores abaixo e execute com o perfil local.
-spring.datasource.url=jdbc:postgresql://localhost:5432/sorteio
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
+# A senha deve vir de SPRING_DATASOURCE_PASSWORD, nunca do Git.
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/sorteio_crente}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.hibernate.ddl-auto=update
