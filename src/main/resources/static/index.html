@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorteador UMADEB</title>
+    <title>Sorteio UMADEB</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,63 +12,68 @@
 
     <header class="topo">
         <img src="images/logo.png" alt="Logo UMADEB" class="logo">
-        <h1>Sorteador UMADEB</h1>
+        <div class="marca">
+            <h1>Sorteio UMADEB</h1>
+        </div>
     </header>
 
     <section class="conteudo">
 
-        <span id="contador"></span>
-
         <p class="descricao">
-            Digite os nomes separados por vírgula
+            Insira os nomes dos participantes abaixo.
         </p>
 
         <div class="campo-nomes">
+                <label for="nomes">Participantes do sorteio</label>
                 <textarea
                         id="nomes"
                         rows="3"
                         placeholder="Ex: Gabriel, Karla, Ricardo"
-                        oninput="autoResize(this); atualizarContador()"
+                        aria-describedby="contador"
                 ></textarea>
+                <span id="contador" aria-live="polite"></span>
         </div>
 
         <div class="acoes">
-            <button id="btnListas" type="button" onclick="abrirModal()">
+            <button id="btnListas" type="button">
                 Participantes
             </button>
 
-            <button id="btnLimpar" type="button" onclick="limparNomes()" class="btn-secundario">
+            <button id="btnLimpar" type="button" class="btn-secundario">
                 Limpar
             </button>
         </div>
 
-        <button id="btnSortear" type="button" onclick="sortear()">
+        <button id="btnSortear" type="button">
             Sortear
         </button>
 
-        <h2 id="resultado"></h2>
+        <p id="mensagem" class="mensagem" role="status" aria-live="polite"></p>
+        <h2 id="resultado" aria-live="polite"></h2>
 
     </section>
 
 </main>
 
-<div id="modal" class="modal">
-    <div class="modal-content">
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo" aria-describedby="modalMensagem" hidden>
+    <div class="modal-content" tabindex="-1">
 
         <div class="modal-header">
-            <h3>Participantes</h3>
-            <button id="btnEditarModo" onclick="toggleModoEdicao()">Editar</button>
+            <h3 id="modalTitulo">Participantes</h3>
+            <button id="btnEditarModo" type="button">Editar</button>
         </div>
 
-        <div id="participantes"></div>
+        <p id="modalMensagem" class="mensagem" role="status" aria-live="polite"></p>
+        <div id="participantes" aria-label="Lista de participantes"></div>
 
         <div class="adicionar">
             <input
                     type="text"
                     id="novoParticipante"
+                    aria-label="Novo participante"
                     placeholder="Nome do participante"
             >
-            <button type="button" onclick="adicionarParticipante()">
+            <button id="btnAdicionarParticipante" type="button">
                 Adicionar
             </button>
         </div>
@@ -76,8 +81,9 @@
         <div class="acoes-modal">
 
             <div class="linha-botoes">
-                <button onclick="adicionarAoSorteio()">Adicionar ao Sorteio</button>
-                <button onclick="fecharModal()" class="btn-secundario">Sair</button>
+                <button id="btnAdicionarAoSorteio" type="button">Adicionar ao Sorteio</button>
+                <button id="btnCancelarEdicao" type="button" class="btn-secundario" hidden>Cancelar</button>
+                <button id="btnFecharModal" type="button" class="btn-secundario">Sair</button>
             </div>
 
         </div>

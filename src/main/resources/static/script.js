@@ -1,9 +1,34 @@
 const API_URL = "/api/v1";
 let sorteioEmAndamento = false;
+let modoEdicaoAtivo = false;
+let participantesOriginais = [];
+let ultimoElementoComFoco = null;
+
+async function lerResposta(response) {
+    const texto = await response.text();
+    let dados = null;
+
+    if (texto) {
+        try {
+            dados = JSON.parse(texto);
+        } catch {
+            throw new Error("O servidor retornou uma resposta inválida.");
+        }
+    } else if (!response.ok) {
+        throw new Error("O servidor retornou uma resposta inválida.");
+    }
+
+    if (!response.ok) {
+        throw new Error(dados?.mensagem || "Não foi possível concluir a operação.");
+    }
+
+    return dados;
+}
 
 function autoResize(el) {
     el.style.height = "auto";
-    el.style.height = el.scrollHeight + "px";
+    el.style.height = Math.min(el.scrollHeight, 220) + "px";
+    el.style.overflowY = el.scrollHeight > 220 ? "auto" : "hidden";
 }
 
 function capitalizarNome(nome) {
@@ -66,13 +91,13 @@ async function sortear() {
     const nomes = tratarNomes(textarea.value);
 
     if (!nomes.length) {
-        resultado.innerText = "Digite pelo menos um nome válido!";
-        resultado.classList.add("resultado-final");
+        mostrarMensagem("Digite pelo menos um nome válido.", true);
         return;
     }
 
     sorteioEmAndamento = true;
     setLoading(true);
+    limparMensagem();
 
     try {
         await animarSorteio(nomes, resultado);
@@ -82,10 +107,10 @@ async function sortear() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ nomes, quantidade: 1 })
         });
-        const data = await response.json();
+        const data = await lerResposta(response);
 
-        if (!response.ok) {
-            throw new Error(data.mensagem || "Não foi possível realizar o sorteio.");
+        if (!Array.isArray(data.vencedores) || data.vencedores.length === 0) {
+            throw new Error("O servidor não retornou um vencedor válido.");
         }
 
         resultado.classList.remove("resultado-final");
@@ -94,12 +119,9 @@ async function sortear() {
         resultado.innerText = "🎉 " + data.vencedores.join(", ");
         resultado.classList.add("resultado-final");
 
-        resultado.scrollIntoView({ behavior: "smooth" });
-
     } catch (error) {
         console.error(error);
-        resultado.innerText = error.message || "Erro ao conectar com o servidor";
-        resultado.classList.add("resultado-final");
+        mostrarMensagem(error.message || "Erro ao conectar com o servidor.", true);
     } finally {
         sorteioEmAndamento = false;
         setLoading(false);
@@ -116,8 +138,25 @@ function setLoading(isLoading) {
         btn.classList.toggle("loading", isLoading);
     });
 
+    document.getElementById("nomes").disabled = isLoading;
+
     botao.innerText = isLoading ? "Sorteando..." : "Sortear";
 }
+
+function mostrarMensagem(mensagem, erro = false) {
+    const elemento = document.getElementById("mensagem");
+    elemento.innerText = mensagem;
+    elemento.classList.toggle("erro", erro);
+}
+
+function limparMensagem() {
+    mostrarMensagem("");
+}
+
+document.getElementById("nomes").addEventListener("input", event => {
+    autoResize(event.target);
+    atualizarContador();
+});
 
 document.getElementById("nomes").addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -126,29 +165,11 @@ document.getElementById("nomes").addEventListener("keydown", e => {
     }
 });
 
-function isMobile() {
-    return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-}
-
-if (isMobile()) {
-    const textarea = document.getElementById("nomes");
-
-    textarea.addEventListener("focus", () => {
-        document.body.style.alignItems = "flex-start";
-        document.body.style.paddingTop = "40px";
-    });
-
-    textarea.addEventListener("blur", () => {
-        setTimeout(() => {
-            document.body.style.alignItems = "center";
-            document.body.style.paddingTop = "20px";
-        }, 150);
-    });
-}
-
 function limparNomes() {
     document.getElementById("nomes").value = "";
     document.getElementById("resultado").innerText = "";
+    limparMensagem();
+    autoResize(document.getElementById("nomes"));
     atualizarContador();
 }
 
@@ -159,17 +180,25 @@ async function abrirModal() {
     btn.classList.add("loading");
     btn.disabled = true;
 
+    ultimoElementoComFoco = document.activeElement;
+    modal.hidden = false;
     modal.style.display = "flex";
+    modal.querySelector(".modal-content").focus();
+    mostrarMensagemModal("Carregando participantes...");
 
     try {
         const response = await fetch(`${API_URL}/participantes`);
-        const lista = await response.json();
-
+        const lista = await lerResposta(response);
+        if (!Array.isArray(lista)) {
+            throw new Error("A lista recebida é inválida.");
+        }
+        participantesOriginais = [...lista];
         renderParticipantes(lista);
+        mostrarMensagemModal("");
 
     } catch (error) {
         console.error(error);
-        alert("Erro ao carregar participantes");
+        mostrarMensagemModal(error.message || "Erro ao carregar participantes.", true);
     }
 
     btn.classList.remove("loading");
@@ -181,10 +210,31 @@ function fecharModal() {
     const conteudo = document.querySelector(".modal-content");
     const btn = document.getElementById("btnEditarModo");
 
+    if (modoEdicaoAtivo && listaAtual().join("\u0000") !== participantesOriginais.join("\u0000")) {
+        if (!window.confirm("Existem alterações não salvas. Deseja sair mesmo assim?")) return;
+    }
+
+    modoEdicaoAtivo = false;
+    modal.hidden = true;
     modal.style.display = "none";
 
     conteudo.classList.remove("modo-edicao");
     btn.innerText = "Editar";
+    document.getElementById("btnCancelarEdicao").hidden = true;
+    mostrarMensagemModal("");
+    ultimoElementoComFoco?.focus();
+}
+
+function mostrarMensagemModal(mensagem, erro = false) {
+    const elemento = document.getElementById("modalMensagem");
+    elemento.innerText = mensagem;
+    elemento.classList.toggle("erro", erro);
+}
+
+function listaAtual() {
+    return Array.from(document.querySelectorAll(".nome-editavel"))
+        .map(input => input.value.trim())
+        .filter(Boolean);
 }
 
 function renderParticipantes(lista) {
@@ -247,16 +297,29 @@ function adicionarParticipante() {
     const input = document.getElementById("novoParticipante");
     const nome = input.value.trim();
 
-    if (!nome) return;
+    if (!nome) {
+        mostrarMensagemModal("Informe um nome válido.", true);
+        input.focus();
+        return;
+    }
+
+    if (listaAtual().some(atual => atual.toLocaleLowerCase() === nome.toLocaleLowerCase())) {
+        mostrarMensagemModal("Esse participante já está na lista.", true);
+        input.select();
+        return;
+    }
 
     const container = document.getElementById("participantes");
     container.appendChild(criarElementoParticipante(nome));
 
     input.value = "";
+    mostrarMensagemModal("");
+    input.focus();
 }
 
 function removerParticipante(event) {
     event.target.closest(".participante")?.remove();
+    mostrarMensagemModal("");
 }
 
 function adicionarAoSorteio() {
@@ -279,10 +342,16 @@ function adicionarAoSorteio() {
 }
 
 async function salvarParticipantes() {
-    const lista = Array.from(
-        document.querySelectorAll(".participante")
-    ).map(p => p.querySelector(".nome-editavel").value.trim())
-        .filter(n => n);
+    const lista = listaAtual();
+
+    if (!lista.length) {
+        mostrarMensagemModal("Mantenha pelo menos um participante na lista.", true);
+        return false;
+    }
+
+    const botao = document.getElementById("btnEditarModo");
+    botao.disabled = true;
+    mostrarMensagemModal("Salvando...");
 
     try {
         const response = await fetch(`${API_URL}/participantes`, {
@@ -293,16 +362,17 @@ async function salvarParticipantes() {
             body: JSON.stringify({ nomes: lista })
         });
 
-        if (!response.ok) {
-            const erro = await response.json();
-            throw new Error(erro.mensagem || "Não foi possível salvar a lista.");
-        }
-
-        alert("Lista salva com sucesso!");
+        await lerResposta(response);
+        participantesOriginais = [...lista];
+        mostrarMensagemModal("Lista salva com sucesso.");
+        return true;
 
     } catch (error) {
         console.error(error);
-        alert("Erro ao salvar lista");
+        mostrarMensagemModal(error.message || "Erro ao salvar lista.", true);
+        return false;
+    } finally {
+        botao.disabled = false;
     }
 }
 
@@ -319,14 +389,13 @@ function habilitarEdicao(event) {
     input.addEventListener("blur", () => {
         let novoValor = input.value.trim();
 
-        if (!novoValor) {
-            novoValor = "Sem nome";
-        }
-
         input.value = novoValor;
 
         input.disabled = true;
         input.style.pointerEvents = "none";
+        if (!novoValor) {
+            item.remove();
+        }
     }, { once: true });
 }
 
@@ -340,27 +409,76 @@ function toggleModoEdicao() {
     const modal = document.querySelector(".modal-content");
     const botao = document.getElementById("btnEditarModo");
 
-    const estaEditando = modal.classList.contains("modo-edicao");
+    const estaEditando = modoEdicaoAtivo;
 
     if (estaEditando) {
-        modal.classList.remove("modo-edicao");
-        botao.innerText = "Editar";
-
-        salvarParticipantes();
+        salvarParticipantes().then(salvo => {
+            if (!salvo) return;
+            modoEdicaoAtivo = false;
+            modal.classList.remove("modo-edicao");
+            botao.innerText = "Editar";
+            document.getElementById("btnCancelarEdicao").hidden = true;
+        });
     } else {
+        modoEdicaoAtivo = true;
         modal.classList.add("modo-edicao");
         botao.innerText = "Salvar";
+        document.getElementById("btnCancelarEdicao").hidden = false;
+        mostrarMensagemModal("");
     }
 }
 
-let modoEdicao = false;
-
-function salvarModoEdicao() {
-    const modal = document.querySelector(".modal-content");
-    const botao = document.getElementById("btnEditarModo");
-
-    modal.classList.remove("modo-edicao");
-
-    botao.innerText = "Editar";
-
+function cancelarEdicao() {
+    renderParticipantes(participantesOriginais);
+    modoEdicaoAtivo = false;
+    document.querySelector(".modal-content").classList.remove("modo-edicao");
+    document.getElementById("btnEditarModo").innerText = "Editar";
+    document.getElementById("btnCancelarEdicao").hidden = true;
+    mostrarMensagemModal("Alterações descartadas.");
 }
+
+document.getElementById("btnSortear").addEventListener("click", sortear);
+document.getElementById("btnListas").addEventListener("click", abrirModal);
+document.getElementById("btnLimpar").addEventListener("click", limparNomes);
+document.getElementById("btnEditarModo").addEventListener("click", toggleModoEdicao);
+document.getElementById("btnAdicionarParticipante").addEventListener("click", adicionarParticipante);
+document.getElementById("btnAdicionarAoSorteio").addEventListener("click", adicionarAoSorteio);
+document.getElementById("btnCancelarEdicao").addEventListener("click", cancelarEdicao);
+document.getElementById("btnFecharModal").addEventListener("click", fecharModal);
+document.getElementById("novoParticipante").addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        adicionarParticipante();
+    }
+});
+
+document.getElementById("modal").addEventListener("click", event => {
+    if (event.target.id === "modal") fecharModal();
+});
+
+document.getElementById("modal").addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        event.preventDefault();
+        fecharModal();
+        return;
+    }
+
+    if (event.key !== "Tab") return;
+
+    const modal = document.getElementById("modal");
+    const focaveis = modal.querySelectorAll("button:not([disabled]), input:not([disabled])");
+    if (!focaveis.length) return;
+
+    const primeiro = focaveis[0];
+    const ultimo = focaveis[focaveis.length - 1];
+    if (event.shiftKey && document.activeElement === primeiro) {
+        event.preventDefault();
+        ultimo.focus();
+    } else if (!event.shiftKey && document.activeElement === ultimo) {
+        event.preventDefault();
+        primeiro.focus();
+    }
+});
+
+autoResize(document.getElementById("nomes"));
+atualizarContador();
