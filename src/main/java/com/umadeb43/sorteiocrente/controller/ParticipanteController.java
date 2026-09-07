@@ -1,14 +1,18 @@
 package com.umadeb43.sorteiocrente.controller;
 
+import com.umadeb43.sorteiocrente.dto.ParticipantesRequest;
 import com.umadeb43.sorteiocrente.service.ParticipanteService;
-import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/participantes")
+@RequestMapping("/api/v1/participantes")
 public class ParticipanteController {
 
     private final ParticipanteService service;
@@ -19,13 +23,11 @@ public class ParticipanteController {
 
     @GetMapping
     public List<String> listar() {
-        return service.listar().stream()
-                .map(p ->p.getNome())
-                .toList();
+        return service.listar().stream().map(participante -> participante.getNome()).toList();
     }
 
     @PostMapping
-    public void salvar(@RequestBody List<String> nomes) {
-        service.salvar(nomes);
+    public void salvar(@Valid @RequestBody ParticipantesRequest request) {
+        service.salvar(request.nomes());
     }
 }

@@ -1,14 +1,7 @@
 package com.umadeb43.sorteiocrente.dto;
 
-public class SorteioResponse {
+import java.time.Instant;
+import java.util.List;
 
-    private String nome;
-
-    public SorteioResponse(String nome) {
-        this.nome = nome;
-    }
-
-    public String getNome() {
-        return nome;
-    }
+public record SorteioResponse(Long id, List<String> vencedores, Instant realizadoEm) {
 }

@@ -1,6 +1,4 @@
-const API_URL = window.location.hostname.includes("localhost")
-    ? "http://localhost:8080"
-    : "https://sorteio-crente-production.up.railway.app";
+const API_URL = "/api/v1";
 
 function autoResize(el) {
     el.style.height = "auto";
@@ -75,20 +73,28 @@ async function sortear() {
     await animarSorteio(nomes, resultado);
 
     try {
-        const response = await fetch(`${API_URL}/sortear?nomes=${nomes.join(",")}`);
+        const response = await fetch(`${API_URL}/sorteios`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nomes, quantidade: 1 })
+        });
         const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.mensagem || "Não foi possível realizar o sorteio.");
+        }
 
         resultado.classList.remove("resultado-final");
         void resultado.offsetWidth;
 
-        resultado.innerText = "🎉 " + data.nome;
+        resultado.innerText = "🎉 " + data.vencedores.join(", ");
         resultado.classList.add("resultado-final");
 
         resultado.scrollIntoView({ behavior: "smooth" });
 
     } catch (error) {
         console.error(error);
-        resultado.innerText = "Erro ao conectar com o servidor";
+        resultado.innerText = error.message || "Erro ao conectar com o servidor";
         resultado.classList.add("resultado-final");
     }
 
@@ -178,10 +184,12 @@ function fecharModal() {
 
 function renderParticipantes(lista) {
     const container = document.getElementById("participantes");
-    container.innerHTML = "";
+    container.replaceChildren();
 
     if (!lista.length) {
-        container.innerHTML = "<p>Nenhum participante ainda</p>";
+        const aviso = document.createElement("p");
+        aviso.textContent = "Nenhum participante ainda";
+        container.appendChild(aviso);
         return;
     }
 
@@ -194,19 +202,27 @@ function criarElementoParticipante(nome) {
     const div = document.createElement("div");
     div.className = "participante";
 
-    div.innerHTML = `
-        <input 
-            type="text" 
-            value="${nome}" 
-            class="nome-editavel" 
-            disabled
-        >
-
-        <div class="acoes-item">
-            <button class="btn-editar" onclick="event.stopPropagation(); habilitarEdicao(event)">✏️</button>
-            <button class="btn-remover" onclick="event.stopPropagation(); removerParticipante(event)">❌</button>
-        </div>
-    `;
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = nome;
+    input.className = "nome-editavel";
+    input.disabled = true;
+    const acoes = document.createElement("div");
+    acoes.className = "acoes-item";
+    const editar = document.createElement("button");
+    editar.type = "button";
+    editar.className = "btn-editar";
+    editar.textContent = "✏️";
+    editar.setAttribute("aria-label", `Editar ${nome}`);
+    editar.addEventListener("click", (event) => { event.stopPropagation(); habilitarEdicao(event); });
+    const remover = document.createElement("button");
+    remover.type = "button";
+    remover.className = "btn-remover";
+    remover.textContent = "❌";
+    remover.setAttribute("aria-label", `Remover ${nome}`);
+    remover.addEventListener("click", (event) => { event.stopPropagation(); removerParticipante(event); });
+    acoes.append(editar, remover);
+    div.append(input, acoes);
 
     div.addEventListener("click", () => {
 
@@ -264,13 +280,18 @@ async function salvarParticipantes() {
         .filter(n => n);
 
     try {
-        await fetch(`${API_URL}/participantes`, {
+        const response = await fetch(`${API_URL}/participantes`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(lista)
+            body: JSON.stringify({ nomes: lista })
         });
+
+        if (!response.ok) {
+            const erro = await response.json();
+            throw new Error(erro.mensagem || "Não foi possível salvar a lista.");
+        }
 
         alert("Lista salva com sucesso!");
 
