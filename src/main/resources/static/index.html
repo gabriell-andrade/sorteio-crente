@@ -1,41 +1,94 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorteador UMADEB</title>
+    <title>Sorteio UMADEB</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
+<main class="container">
 
-    <div class="topo">
-        <img src="images/logo.png" class="logo">
-        <h1>Sorteador UMADEB</h1>
-    </div>
+    <header class="topo">
+        <img src="images/logo.png" alt="Logo UMADEB" class="logo">
+        <div class="marca">
+            <h1>Sorteio UMADEB</h1>
+        </div>
+    </header>
 
-    <div class="conteudo">
+    <section class="conteudo">
 
-        <span id="contador"></span>
-
-        <p class="descricao">Digite os nomes separados por vírgula</p>
+        <p class="descricao">
+            Insira os nomes dos participantes abaixo.
+        </p>
 
         <div class="campo-nomes">
-            <textarea
-                    id="nomes"
-                    rows="3"
-                    placeholder="Ex: Gabriel, Karla, Ricardo"
-                    oninput="autoResize(this); atualizarContador()"
-            ></textarea>
+                <label for="nomes">Participantes do sorteio</label>
+                <textarea
+                        id="nomes"
+                        rows="3"
+                        placeholder="Ex: Gabriel, Karla, Ricardo"
+                        aria-describedby="contador"
+                ></textarea>
+                <span id="contador" aria-live="polite"></span>
+        </div>
+
+        <div class="acoes">
+            <button id="btnListas" type="button">
+                Participantes
+            </button>
+
+            <button id="btnLimpar" type="button" class="btn-secundario">
+                Limpar
+            </button>
+        </div>
+
+        <button id="btnSortear" type="button">
+            Sortear
+        </button>
+
+        <p id="mensagem" class="mensagem" role="status" aria-live="polite"></p>
+        <h2 id="resultado" aria-live="polite"></h2>
+
+    </section>
+
+</main>
+
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo" aria-describedby="modalMensagem" hidden>
+    <div class="modal-content" tabindex="-1">
+
+        <div class="modal-header">
+            <h3 id="modalTitulo">Participantes</h3>
+            <button id="btnEditarModo" type="button">Editar</button>
+        </div>
+
+        <p id="modalMensagem" class="mensagem" role="status" aria-live="polite"></p>
+        <div id="participantes" aria-label="Lista de participantes"></div>
+
+        <div class="adicionar">
+            <input
+                    type="text"
+                    id="novoParticipante"
+                    aria-label="Novo participante"
+                    placeholder="Nome do participante"
+            >
+            <button id="btnAdicionarParticipante" type="button">
+                Adicionar
+            </button>
+        </div>
+
+        <div class="acoes-modal">
+
+            <div class="linha-botoes">
+                <button id="btnAdicionarAoSorteio" type="button">Adicionar ao Sorteio</button>
+                <button id="btnCancelarEdicao" type="button" class="btn-secundario" hidden>Cancelar</button>
+                <button id="btnFecharModal" type="button" class="btn-secundario">Sair</button>
+            </div>
 
         </div>
 
-        <button id="btnSortear" onclick="sortear()">Sortear</button>
-
-        <h2 id="resultado"></h2>
     </div>
-
 </div>
 
 <script src="script.js"></script>

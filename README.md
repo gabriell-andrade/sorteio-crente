@@ -17,6 +17,7 @@ Aplicação web full stack desenvolvida com **Spring Boot** e **JavaScript** par
 - Java
 - Spring Boot
 - Maven
+- PostgreSQL
 
 ### 🔜 Frontend
 
@@ -50,8 +51,27 @@ sorteio-crente-main/
 
 ### ✅ Pré-requisitos
 
-- Java 17+
+- Java 21+
 - Maven
+- PostgreSQL 14+
+
+### 🗄️ Configuração do PostgreSQL
+
+Crie o banco antes de iniciar a aplicação:
+
+```sql
+CREATE DATABASE sorteio_crente;
+```
+
+Por padrão, a aplicação conecta em `localhost:5432`, com usuário `postgres` e senha vazia. Para usar outros dados, configure as variáveis de ambiente:
+
+```powershell
+$env:SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/sorteio_crente"
+$env:SPRING_DATASOURCE_USERNAME="postgres"
+$env:SPRING_DATASOURCE_PASSWORD="sua senha"
+```
+
+As tabelas são criadas e atualizadas pelo Hibernate (`ddl-auto=update`). O Flyway foi separado para uma próxima etapa porque a versão PostgreSQL 18.6 usada localmente ainda não é reconhecida pelo Flyway disponível. Os nomes atuais ficam na tabela `participante`; os nomes usados em cada sorteio são preservados nas tabelas de histórico.
 
 ---
 
@@ -108,15 +128,24 @@ http://localhost:8080
 
 ## 🔌 API
 
-### 📍 Endpoint
+### 📍 Endpoints
 
-GET /sortear?nomes=Gabriel,Karla,Ricardo
+GET /api/v1/participantes
 
-### 📤 Response
+POST /api/v1/participantes
+
+POST /api/v1/sorteios
+
+GET /api/v1/sorteios?pagina=0&tamanho=20
+
+DELETE /api/v1/sorteios
+
+### 📤 Exemplo de sorteio
 
 ```json
 {
-  "nome": "Karla"
+  "nomes": ["Gabriel", "Karla", "Ricardo"],
+  "quantidade": 1
 }
 ```
 
